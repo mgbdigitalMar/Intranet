@@ -7,6 +7,7 @@ use App\Models\RoomReservation;
 use App\Models\CarReservation;
 use App\Models\PurchaseRequest;
 use App\Models\Absence;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
@@ -15,13 +16,15 @@ class DashboardController extends Controller
         $today    = now()->toDateString();
         $tomorrow = now()->addDay()->toDateString();
 
-        // Stats
-        $stats = [
-            'rooms'     => RoomReservation::where('date', $today)->count(),
-            'cars'      => CarReservation::where('date', '>=', $today)->count(),
-            'purchases' => PurchaseRequest::where('status', 'pendiente')->count(),
-            'absences'  => Absence::whereYear('start_date', now()->year)->whereMonth('start_date', now()->month)->count(),
-        ];
+        // Stats (cached)
+        $stats = Cache::remember("dashboard_stats_user_{session('user_id')}", 300, function () use ($today) {
+            return [
+                'rooms'     => RoomReservation::where('date', $today)->count(),
+                'cars'      => CarReservation::where('date', '>=', $today)->count(),
+                'purchases' => PurchaseRequest::where('status', 'pendiente')->count(),
+                'absences'  => Absence::whereYear('start_date', now()->year)->whereMonth('start_date', now()->month)->count(),
+            ];
+        });
 
         // Upcoming events (next 30 days)
         $upcomingEvents = News::where('type', 'evento')
