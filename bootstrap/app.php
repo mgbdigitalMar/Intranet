@@ -10,7 +10,8 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
+->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(append: \App\Http\Middleware\TrustProxies::class);
         $middleware->alias([
             'auth.custom' => \App\Http\Middleware\AuthMiddleware::class,
             'admin'       => \App\Http\Middleware\AdminMiddleware::class,
