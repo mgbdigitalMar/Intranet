@@ -6,6 +6,8 @@ use App\Models\PurchaseRequest;
 
 class PurchaseController extends Controller
 {
+    use \App\Traits\ReservationTrait;
+
     private array $catalog = [
         '💻 Ordenador portátil','🖥️ Monitor','⌨️ Teclado','🖱️ Ratón',
         '🖨️ Impresora','📱 Móvil de empresa','🎧 Auriculares',
@@ -54,10 +56,7 @@ class PurchaseController extends Controller
 
     public function destroy($id)
     {
-        $req = PurchaseRequest::findOrFail($id);
-        if ($req->user_id !== session('user_id') && session('user_role') !== 'admin') abort(403);
-        $req->delete();
-        return redirect()->route('purchases.index')->with('success', 'Solicitud eliminada.');
+        return $this->commonDestroy($id, PurchaseRequest::class, 'purchases.index', 'Solicitud eliminada.');
     }
 
     public function approve($id)
@@ -70,9 +69,6 @@ class PurchaseController extends Controller
 
     public function reject($id)
     {
-        if (session('user_role') !== 'admin') abort(403);
-        $req = PurchaseRequest::findOrFail($id);
-        $req->update(['status' => 'rechazada', 'admin_notes' => request('admin_notes')]);
-        return redirect()->back()->with('success', 'Solicitud rechazada.');
+        return $this->commonReject($id, PurchaseRequest::class, 'Solicitud rechazada.');
     }
 }

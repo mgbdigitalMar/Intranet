@@ -6,6 +6,8 @@ use App\Models\Absence;
 
 class AbsenceController extends Controller
 {
+    use \App\Traits\ReservationTrait;
+
     private array $types = ['Vacaciones','Baja médica','Asunto personal','Formación externa','Visita médica','Otro'];
 
     public function index()
@@ -46,23 +48,16 @@ class AbsenceController extends Controller
 
     public function destroy($id)
     {
-        $abs = Absence::findOrFail($id);
-        if ($abs->user_id !== session('user_id') && session('user_role') !== 'admin') abort(403);
-        $abs->delete();
-        return redirect()->route('absences.index')->with('success', 'Ausencia eliminada.');
+        return $this->commonDestroy($id, Absence::class, 'absences.index', 'Ausencia eliminada.');
     }
 
     public function approve($id)
     {
-        if (session('user_role') !== 'admin') abort(403);
-        Absence::findOrFail($id)->update(['status' => 'aprobada']);
-        return redirect()->back()->with('success', 'Ausencia aprobada.');
+        return $this->commonApprove($id, Absence::class, 'Ausencia aprobada.');
     }
 
     public function reject($id)
     {
-        if (session('user_role') !== 'admin') abort(403);
-        Absence::findOrFail($id)->update(['status' => 'rechazada']);
-        return redirect()->back()->with('success', 'Ausencia rechazada.');
+        return $this->commonReject($id, Absence::class, 'Ausencia rechazada.');
     }
 }

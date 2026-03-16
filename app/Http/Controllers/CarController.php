@@ -7,6 +7,8 @@ use App\Models\CompanyCar;
 
 class CarController extends Controller
 {
+    use \App\Traits\ReservationTrait;
+
     public function index()
     {
         $today  = now()->toDateString();
@@ -50,19 +52,11 @@ class CarController extends Controller
 
     public function destroy($id)
     {
-        $res = CarReservation::findOrFail($id);
-        if ($res->user_id !== session('user_id') && session('user_role') !== 'admin') {
-            return redirect()->route('cars.index')->with('error', 'No tienes permiso para cancelar esta reserva.');
-        }
-        $res->delete();
-        return redirect()->route('cars.index')->with('success', 'Reserva cancelada.');
+        return $this->commonDestroy($id, CarReservation::class, 'cars.index', 'Reserva cancelada.');
     }
 
     public function approve($id)
     {
-        if (session('user_role') !== 'admin') abort(403);
-        $res = CarReservation::findOrFail($id);
-        $res->update(['status' => 'confirmada']);
-        return redirect()->back()->with('success', 'Reserva de vehículo confirmada.');
+        return $this->commonApprove($id, CarReservation::class, 'Reserva de vehículo confirmada.', 'confirmada');
     }
 }

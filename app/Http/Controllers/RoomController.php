@@ -7,6 +7,8 @@ use App\Models\CompanyRoom;
 
 class RoomController extends Controller
 {
+    use \App\Traits\ReservationTrait;
+
     public function index()
     {
         $today        = now()->toDateString();
@@ -52,19 +54,11 @@ class RoomController extends Controller
 
     public function destroy($id)
     {
-        $res = RoomReservation::findOrFail($id);
-        if ($res->user_id !== session('user_id') && session('user_role') !== 'admin') {
-            return redirect()->route('rooms.index')->with('error', 'No tienes permiso para cancelar esta reserva.');
-        }
-        $res->delete();
-        return redirect()->route('rooms.index')->with('success', 'Reserva cancelada.');
+        return $this->commonDestroy($id, RoomReservation::class, 'rooms.index', 'Reserva cancelada.');
     }
 
     public function approve($id)
     {
-        if (session('user_role') !== 'admin') abort(403);
-        $res = RoomReservation::findOrFail($id);
-        $res->update(['status' => 'confirmada']);
-        return redirect()->back()->with('success', 'Reserva confirmada.');
+        return $this->commonApprove($id, RoomReservation::class, 'Reserva confirmada.', 'confirmada');
     }
 }
