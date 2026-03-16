@@ -23,11 +23,11 @@ trait ReservationTrait
         return redirect()->route($route)->with('success', $successMsg);
     }
 
-    protected function commonApprove($id, string $modelClass, string $successMsg = 'Aprobado correctamente.')
+    protected function commonApprove($id, string $modelClass, string $status, string $successMsg = 'Aprobado correctamente.')
     {
         if (session('user_role') !== 'admin') abort(403);
         $item = $modelClass::findOrFail($id);
-        $item->update(['status' => 'aprobada']);
+        $item->update(['status' => $status]);
         return redirect()->back()->with('success', $successMsg);
     }
 

@@ -57,6 +57,6 @@ class CarController extends Controller
 
     public function approve($id)
     {
-        return $this->commonApprove($id, CarReservation::class, 'Reserva de vehículo confirmada.', 'confirmada');
+        return $this->commonApprove($id, CarReservation::class, 'confirmada', 'Reserva de vehículo confirmada.');
     }
 }

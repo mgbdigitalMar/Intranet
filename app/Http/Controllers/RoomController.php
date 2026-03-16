@@ -59,6 +59,6 @@ class RoomController extends Controller
 
     public function approve($id)
     {
-        return $this->commonApprove($id, RoomReservation::class, 'Reserva confirmada.', 'confirmada');
+        return $this->commonApprove($id, RoomReservation::class, 'confirmada', 'Reserva confirmada.');
     }
 }
