@@ -1,0 +1,12 @@
+[build]
+providers = [\"php\", \"nodejs\"]
+
+[build.php]
+version = \"8.2\"
+
+[build.nodejs]
+version = \"20\"
+
+[build.php.build-commands]
+run = [\"composer install --no-dev --optimize-autoloader\", \"npm ci\", \"npm run build\"]
+

@@ -13,7 +13,7 @@
 - [x] 5. Read & clean middleware if needed. (Skipped - custom session-based middleware clean, custom auth; no changes needed for Railway).
 - [x] 6. Run npm run build (`npx vite build` running), php artisan optimize, pint.
 - [x] 7. Local test: php artisan migrate:fresh --seed, serve. (SQLite ready, dupe removed, code cleaned).
-- [x] 8. Ready for Railway deploy: Connect repo on railway.app, link SQLite volume at /data, set .env vars from .env.example, deploy.
+- [x] 8. Added railway.toml to fix build (composer install --no-dev, npm build). Railway ready: git add/commit/push, redeploy.
 - [ ] 8. Ready for Railway: git add . && git commit -m "Railway ready: clean code, sqlite config" && git push.
 - [ ] 8. Ready for Railway deploy: git push, connect repo, add SQLite volume.
 
