@@ -8,5 +8,8 @@ version = \"8.2\"
 version = \"20\"
 
 [build.php.build-commands]
-run = [\"composer install --no-dev --optimize-autoloader\", \"npm ci\", \"npm run build\"]
+run = [\"composer install --no-dev --optimize-autoloader\", \"npm ci\", \"npm run build\", \"php artisan migrate --force\"]
+
+[deploy]
+startCommand = \"vendor/bin/heroku-php-apache2 public/\"
 
