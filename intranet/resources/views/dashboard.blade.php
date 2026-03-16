@@ -1,0 +1,111 @@
+@extends('layouts.app')
+@section('title','Dashboard')
+@section('content')
+
+{{-- Alerts --}}
+@if(count($alerts))
+<div class="alerts">
+  @foreach($alerts as $al)
+  <div class="alert alert-{{ $al['type'] }}">
+    <span class="al-icon">{{ $al['type']==='birthday'?'🎂':($al['type']==='event'?'📅':'🏖️') }}</span>
+    <span>{!! $al['msg'] !!}</span>
+    <button class="alert-close" onclick="this.parentElement.remove()">✕</button>
+  </div>
+  @endforeach
+</div>
+@endif
+
+{{-- Stats --}}
+<div class="stats-grid">
+  <div class="stat-card blue">
+    <div class="stat-icon">🚪</div>
+    <div class="stat-val">{{ $stats['rooms'] }}</div>
+    <div class="stat-label">Reservas de salas hoy</div>
+  </div>
+  <div class="stat-card amber">
+    <div class="stat-icon">🚗</div>
+    <div class="stat-val">{{ $stats['cars'] }}</div>
+    <div class="stat-label">Vehículos reservados</div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-icon">🛒</div>
+    <div class="stat-val">{{ $stats['purchases'] }}</div>
+    <div class="stat-label">Solicitudes pendientes</div>
+  </div>
+  <div class="stat-card purple">
+    <div class="stat-icon">🏖️</div>
+    <div class="stat-val">{{ $stats['absences'] }}</div>
+    <div class="stat-label">Ausencias este mes</div>
+  </div>
+</div>
+
+<div class="two-col" style="margin-bottom:18px">
+  {{-- Upcoming events --}}
+  <div class="card">
+    <div class="card-title">📅 Próximos eventos</div>
+    @if($upcomingEvents->isEmpty())
+      <div class="empty"><div class="e-icon">📭</div><p>No hay eventos próximos</p></div>
+    @else
+    <div class="timeline">
+      @foreach($upcomingEvents as $ev)
+      <div class="tl-item">
+        <div class="tl-date">{{ $ev->event_date->isoFormat('ddd D MMM · HH:mm') }}</div>
+        <div class="tl-content">{{ $ev->title }}</div>
+        <div class="tl-sub">🎉 Evento corporativo</div>
+      </div>
+      @endforeach
+    </div>
+    @endif
+  </div>
+
+  {{-- Birthdays --}}
+  <div class="card">
+    <div class="card-title">🎂 Próximos cumpleaños</div>
+    @foreach($birthdays as $b)
+    @php
+      $u    = $b['user'];
+      $days = $b['days'];
+      $label = $days === 0 ? '🎉 ¡Hoy!' : ($days === 1 ? '🎂 Mañana' : "En {$days} días");
+    @endphp
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div class="avatar">{{ $u->initials() }}</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:13.5px">{{ $u->name }}</div>
+        <div style="font-size:12px;color:var(--text2)">{{ $u->department }}</div>
+      </div>
+      <span class="tag tag-amber">{{ $label }}</span>
+    </div>
+    @endforeach
+    @if($birthdays->isEmpty())
+      <div class="empty"><p>Sin cumpleaños próximos</p></div>
+    @endif
+  </div>
+</div>
+
+{{-- Recent absences --}}
+<div class="card">
+  <div class="card-title">🏖️ Ausencias recientes</div>
+  @if($recentAbsences->isEmpty())
+    <div class="empty"><p>Sin ausencias registradas</p></div>
+  @else
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Empleado</th><th>Tipo</th><th>Fechas</th><th>Estado</th></tr></thead>
+      <tbody>
+        @foreach($recentAbsences as $ab)
+        <tr>
+          <td><strong>{{ $ab->user->name }}</strong></td>
+          <td>{{ $ab->type }}</td>
+          <td>{{ $ab->start_date->format('d/m/Y') }}
+            @if($ab->start_date != $ab->end_date) → {{ $ab->end_date->format('d/m/Y') }} @endif
+          </td>
+          <td>@include('partials.status', ['status' => $ab->status])</td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
+  @endif
+</div>
+
+@endsection

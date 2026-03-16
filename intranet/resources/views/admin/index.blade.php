@@ -1,0 +1,231 @@
+@extends('layouts.app')
+@section('title','Panel de Administración')
+@section('content')
+
+<div class="admin-banner">
+  ⭐ Panel de administración — Tienes acceso completo a toda la gestión del portal.
+</div>
+
+<div class="page-header">
+  <div><h2>⚙️ Panel de Administración</h2><p>Gestión completa del portal corporativo</p></div>
+  <div class="page-header-actions">
+    <a href="{{ route('admin.rooms-config') }}" class="btn btn-ghost">🚪 Gestionar Salas</a>
+    <a href="{{ route('admin.cars-config') }}" class="btn btn-ghost">🚗 Gestionar Vehículos</a>
+    <a href="{{ route('employees.create') }}" class="btn btn-primary">+ Añadir empleado</a>
+  </div>
+</div>
+
+{{-- Stats --}}
+<div class="stats-grid" style="margin-bottom:24px">
+  @foreach([
+    ['blue','👥',$stats['employees'],'Empleados'],
+    ['amber','📰',$stats['news'],'Publicaciones'],
+    ['green','🛒',$stats['purchases'],'Solicitudes compra'],
+    ['purple','🏖️',$stats['absences'],'Ausencias'],
+  ] as [$color,$icon,$val,$label])
+  <div class="stat-card {{ $color }}">
+    <div class="stat-icon">{{ $icon }}</div>
+    <div class="stat-val">{{ $val }}</div>
+    <div class="stat-label">{{ $label }}</div>
+  </div>
+  @endforeach
+</div>
+
+{{-- Pending purchases + pending absences --}}
+<div class="two-col" style="margin-bottom:20px">
+
+  {{-- Pending purchases --}}
+  <div class="card">
+    <div class="card-title">🛒 Solicitudes de compra pendientes
+      @if($pendingPurchases->count())
+        <span class="tag tag-amber">{{ $pendingPurchases->count() }}</span>
+      @endif
+    </div>
+    @if($pendingPurchases->isEmpty())
+      <div class="empty"><p>Sin solicitudes pendientes ✅</p></div>
+    @else
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Empleado</th><th>Artículo</th><th>Cant.</th><th>Acciones</th></tr></thead>
+        <tbody>
+          @foreach($pendingPurchases as $p)
+          <tr>
+            <td>{{ $p->user->name }}</td>
+            <td title="{{ $p->reason }}"><strong>{{ $p->item }}</strong></td>
+            <td>{{ $p->quantity }}</td>
+            <td style="display:flex;gap:6px">
+              <form action="{{ route('purchases.approve', $p->id) }}" method="POST">
+                @csrf <button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button>
+              </form>
+              <form action="{{ route('purchases.reject', $p->id) }}" method="POST">
+                @csrf <button type="submit" class="btn btn-sm btn-danger">❌ Rechazar</button>
+              </form>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+    @endif
+  </div>
+
+  {{-- Pending absences --}}
+  <div class="card">
+    <div class="card-title">🏖️ Ausencias pendientes
+      @if($pendingAbsences->count())
+        <span class="tag tag-amber">{{ $pendingAbsences->count() }}</span>
+      @endif
+    </div>
+    @if($pendingAbsences->isEmpty())
+      <div class="empty"><p>Sin ausencias pendientes ✅</p></div>
+    @else
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Empleado</th><th>Tipo</th><th>Fechas</th><th>Acciones</th></tr></thead>
+        <tbody>
+          @foreach($pendingAbsences as $ab)
+          <tr>
+            <td>{{ $ab->user->name }}</td>
+            <td>{{ $ab->type }}</td>
+            <td>{{ $ab->start_date->format('d/m') }}–{{ $ab->end_date->format('d/m/Y') }}</td>
+            <td style="display:flex;gap:6px">
+              <form action="{{ route('absences.approve', $ab->id) }}" method="POST">
+                @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
+              </form>
+              <form action="{{ route('absences.reject', $ab->id) }}" method="POST">
+                @csrf <button type="submit" class="btn btn-sm btn-danger">❌</button>
+              </form>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+    @endif
+  </div>
+
+</div>
+
+{{-- Pending rooms + pending cars --}}
+<div class="two-col" style="margin-bottom:20px">
+
+  <div class="card">
+    <div class="card-title">🚪 Salas pendientes
+      @if($pendingRooms->count()) <span class="tag tag-amber">{{ $pendingRooms->count() }}</span> @endif
+    </div>
+    @if($pendingRooms->isEmpty())
+      <div class="empty"><p>Sin reservas pendientes ✅</p></div>
+    @else
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sala</th><th>Fecha</th><th>Empleado</th><th>Acción</th></tr></thead>
+        <tbody>
+          @foreach($pendingRooms as $r)
+          <tr>
+            <td>{{ $r->room }}</td>
+            <td>{{ $r->date->format('d/m') }} {{ $r->hour }}</td>
+            <td>{{ $r->user->name }}</td>
+            <td>
+              <form action="{{ route('rooms.approve', $r->id) }}" method="POST" style="display:inline">
+                @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
+              </form>
+              <form action="{{ route('rooms.destroy', $r->id) }}" method="POST" style="display:inline">
+                @csrf @method('DELETE')
+                <button type="submit" class="btn btn-sm btn-danger">❌</button>
+              </form>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+    @endif
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚗 Vehículos pendientes
+      @if($pendingCars->count()) <span class="tag tag-amber">{{ $pendingCars->count() }}</span> @endif
+    </div>
+    @if($pendingCars->isEmpty())
+      <div class="empty"><p>Sin reservas pendientes ✅</p></div>
+    @else
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Vehículo</th><th>Fecha</th><th>Empleado</th><th>Acción</th></tr></thead>
+        <tbody>
+          @foreach($pendingCars as $c)
+          <tr>
+            <td>{{ Str::before($c->car,' (') }}</td>
+            <td>{{ $c->date->format('d/m') }} {{ $c->hour }}</td>
+            <td>{{ $c->user->name }}</td>
+            <td>
+              <form action="{{ route('cars.approve', $c->id) }}" method="POST" style="display:inline">
+                @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
+              </form>
+              <form action="{{ route('cars.destroy', $c->id) }}" method="POST" style="display:inline">
+                @csrf @method('DELETE')
+                <button type="submit" class="btn btn-sm btn-danger">❌</button>
+              </form>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
+    @endif
+  </div>
+
+</div>
+
+{{-- Employees table --}}
+<div class="card">
+  <div class="card-title">👥 Gestión de empleados</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Nombre</th><th>Email</th><th>Dpto.</th><th>Cargo</th><th>Rol</th><th>Acciones</th></tr></thead>
+      <tbody>
+        @foreach($employees as $emp)
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="avatar" style="width:30px;height:30px;font-size:11px;flex-shrink:0">{{ $emp->initials() }}</div>
+              <strong>{{ $emp->name }}</strong>
+            </div>
+          </td>
+          <td>{{ $emp->email }}</td>
+          <td>{{ $emp->department }}</td>
+          <td>{{ $emp->position }}</td>
+          <td>
+            @if($emp->isAdmin())
+              <span class="badge-admin">⭐ Admin</span>
+            @else
+              <span style="color:var(--text2);font-size:13px">👤 Empleado</span>
+            @endif
+          </td>
+          <td style="display:flex;gap:6px;flex-wrap:wrap">
+            <a href="{{ route('employees.edit', $emp->id) }}" class="btn btn-sm btn-ghost">✏️ Editar</a>
+            @if($emp->id !== session('user_id'))
+            <form action="{{ route('employees.toggleRole', $emp->id) }}" method="POST">
+              @csrf
+              <button type="submit" class="btn btn-sm btn-amber" title="Cambiar rol">
+                {{ $emp->isAdmin() ? '⬇️ Quitar admin' : '⬆️ Hacer admin' }}
+              </button>
+            </form>
+            <form action="{{ route('employees.destroy', $emp->id) }}" method="POST"
+              onsubmit="return confirm('¿Eliminar a {{ $emp->name }}?')">
+              @csrf @method('DELETE')
+              <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+            </form>
+            @endif
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:14px">
+    <a href="{{ route('employees.create') }}" class="btn btn-primary btn-sm">+ Añadir nuevo empleado</a>
+  </div>
+</div>
+
+@endsection

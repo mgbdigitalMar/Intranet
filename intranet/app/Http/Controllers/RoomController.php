@@ -1,0 +1,70 @@
+<?php
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\RoomReservation;
+use App\Models\CompanyRoom;
+
+class RoomController extends Controller
+{
+    public function index()
+    {
+        $today        = now()->toDateString();
+        $rooms        = CompanyRoom::all();
+        $allRes       = RoomReservation::with('user')->orderBy('date','desc')->orderBy('hour')->get();
+        $myRes        = RoomReservation::with('user')->where('user_id', session('user_id'))->orderBy('date','desc')->get();
+        $todayRes     = RoomReservation::where('date', $today)->get();
+        return view('rooms.index', compact('rooms','allRes','myRes','todayRes'));
+    }
+
+    public function create()
+    {
+        $rooms = CompanyRoom::all();
+        return view('rooms.create', compact('rooms'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'room'     => 'required',
+            'date'     => 'required|date|after_or_equal:today',
+            'hour'     => 'required',
+            'duration' => 'required|integer|min:1|max:8',
+            'reason'   => 'required|max:255',
+        ], [
+            'date.after_or_equal' => 'La fecha no puede ser anterior a hoy.',
+            'room.required'       => 'Selecciona una sala.',
+            'reason.required'     => 'Indica el motivo de la reserva.',
+        ]);
+
+        RoomReservation::create([
+            'user_id'  => session('user_id'),
+            'room'     => $request->room,
+            'date'     => $request->date,
+            'hour'     => $request->hour,
+            'duration' => $request->duration,
+            'reason'   => $request->reason,
+            'status'   => 'pendiente',
+        ]);
+
+        return redirect()->route('rooms.index')->with('success', 'Reserva solicitada correctamente. Pendiente de confirmación.');
+    }
+
+    public function destroy($id)
+    {
+        $res = RoomReservation::findOrFail($id);
+        if ($res->user_id !== session('user_id') && session('user_role') !== 'admin') {
+            return redirect()->route('rooms.index')->with('error', 'No tienes permiso para cancelar esta reserva.');
+        }
+        $res->delete();
+        return redirect()->route('rooms.index')->with('success', 'Reserva cancelada.');
+    }
+
+    public function approve($id)
+    {
+        if (session('user_role') !== 'admin') abort(403);
+        $res = RoomReservation::findOrFail($id);
+        $res->update(['status' => 'confirmada']);
+        return redirect()->back()->with('success', 'Reserva confirmada.');
+    }
+}
