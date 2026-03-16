@@ -1,15 +1,15 @@
 [build]
-providers = [\"php\", \"nodejs\"]
+providers = ["php", "nodejs"]
 
 [build.php]
-version = \"8.2\"
+version = "8.2"
 
 [build.nodejs]
-version = \"20\"
+version = "20"
 
 [build.php.build-commands]
-run = [\"composer install --no-dev --optimize-autoloader\", \"npm ci\", \"npm run build\", \"php artisan migrate --force\"]
+run = ["composer install --no-dev --optimize-autoloader", "npm ci", "npm run build", "php artisan migrate --force"]
 
 [deploy]
-startCommand = \"vendor/bin/heroku-php-apache2 public/\"
+startCommand = "vendor/bin/heroku-php-apache2 public/"
 
