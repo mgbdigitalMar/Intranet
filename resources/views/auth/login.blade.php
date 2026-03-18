@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>IntraNet · Iniciar sesión</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+@vite(['resources/css/app.css'])
 <style>
 html,body{overflow-x:hidden;max-width:100vw;}
 :root{--bg:#0d1117;--surface:#161b27;--surface2:#1e2638;--border:#2a3450;

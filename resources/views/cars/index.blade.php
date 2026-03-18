@@ -1,5 +1,17 @@
 @extends('layouts.app')
 @section('title','Vehículos')
+
+@push('css')
+<style>
+.resource-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;transition:all .2s;}
+.resource-card:hover{border-color:var(--border2);transform:translateY(-2px);}
+.resource-card .rc-icon{font-size:28px;margin-bottom:8px;}
+.resource-card .rc-name{font-weight:700;font-size:14px;margin-bottom:3px;}
+.resource-card .rc-meta{font-size:11px;color:var(--text2);margin-bottom:10px;}
+.resource-card .rc-status{margin-top:4px;}
+</style>
+@endpush
+
 @section('content')
 
 <div class="page-header">
