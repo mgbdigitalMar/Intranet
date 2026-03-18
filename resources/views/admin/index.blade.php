@@ -8,7 +8,7 @@
 
 <div class="page-header">
   <div><h2>⚙️ Panel de Administración</h2><p>Gestión completa del portal corporativo</p></div>
-  <div class="page-header-actions">
+  <div class="page-header-actions" style="display:flex;gap:8px;flex-wrap:wrap">
     <a href="{{ route('admin.rooms-config') }}" class="btn btn-ghost">🚪 Gestionar Salas</a>
     <a href="{{ route('admin.cars-config') }}" class="btn btn-ghost">🚗 Gestionar Vehículos</a>
     <a href="{{ route('employees.create') }}" class="btn btn-primary">+ Añadir empleado</a>
@@ -53,7 +53,7 @@
             <td>{{ $p->user->name }}</td>
             <td title="{{ $p->reason }}"><strong>{{ $p->item }}</strong></td>
             <td>{{ $p->quantity }}</td>
-            <td style="display:flex;gap:6px">
+            <td style="display:flex;gap:6px;flex-wrap:wrap">
               <form action="{{ route('purchases.approve', $p->id) }}" method="POST">
                 @csrf <button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button>
               </form>
@@ -104,7 +104,7 @@
             <td>{{ $ab->user->name }}</td>
             <td>{{ $ab->type }}</td>
             <td>{{ $ab->start_date->format('d/m') }}–{{ $ab->end_date->format('d/m/Y') }}</td>
-            <td style="display:flex;gap:6px">
+            <td style="display:flex;gap:6px;flex-wrap:wrap">
               <form action="{{ route('absences.approve', $ab->id) }}" method="POST">
                 @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
               </form>
@@ -158,7 +158,7 @@
             <td>{{ $r->room }}</td>
             <td>{{ $r->date->format('d/m') }} {{ $r->hour }}</td>
             <td>{{ $r->user->name }}</td>
-            <td>
+            <td style="display:flex;gap:6px;flex-wrap:wrap">
               <form action="{{ route('rooms.approve', $r->id) }}" method="POST" style="display:inline">
                 @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
               </form>
@@ -208,7 +208,7 @@
             <td>{{ Str::before($c->car,' (') }}</td>
             <td>{{ $c->date->format('d/m') }} {{ $c->hour }}</td>
             <td>{{ $c->user->name }}</td>
-            <td>
+            <td style="display:flex;gap:6px;flex-wrap:wrap">
               <form action="{{ route('cars.approve', $c->id) }}" method="POST" style="display:inline">
                 @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
               </form>
