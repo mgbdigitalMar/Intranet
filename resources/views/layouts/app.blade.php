@@ -2,11 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>{{ config('app.name','IntraNet') }} · @yield('title','Portal')</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 <style>
+html,body{overflow-x:hidden;max-width:100vw;}
 :root{
   --bg:#0d1117;--surface:#161b27;--surface2:#1e2638;--surface3:#242d42;
   --border:#2a3450;--border2:#3a4870;

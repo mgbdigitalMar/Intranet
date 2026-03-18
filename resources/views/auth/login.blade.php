@@ -2,11 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>IntraNet · Iniciar sesión</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 <style>
+html,body{overflow-x:hidden;max-width:100vw;}
 :root{--bg:#0d1117;--surface:#161b27;--surface2:#1e2638;--border:#2a3450;
   --text:#e8ecf5;--text2:#8b97b8;--primary:#4f79f7;--primary-light:#6b8ff9;
   --primary-dim:rgba(79,121,247,.12);--red:#f74f6e;--red-dim:rgba(247,79,110,.12);
@@ -50,6 +51,21 @@ h2{font-size:26px;font-weight:700;margin-bottom:5px;}
 .demo-box strong{color:var(--primary);}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 .shake{animation:shake .3s ease;}
+
+/* Mobile */
+@media(max-width:480px){
+  body{padding:12px;}
+  .card{padding:24px 20px;border-radius:16px;}
+  .logo{margin-bottom:20px;}
+  .logo-icon{width:38px;height:38px;font-size:18px;}
+  .logo h1{font-size:18px;}
+  h2{font-size:20px;}
+  .sub{font-size:12px;margin-bottom:16px;}
+  .form-group{margin-bottom:12px;}
+  .form-control{padding:10px 12px;font-size:14px;}
+  .btn{padding:11px;font-size:14px;}
+  .demo-box{font-size:10px;padding:10px;}
+}
 </style>
 </head>
 <body>
