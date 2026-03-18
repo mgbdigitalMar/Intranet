@@ -12,8 +12,8 @@ class RoomController extends Controller
     public function index()
     {
         $today        = now()->toDateString();
-        $rooms        = CompanyRoom::all();
-        $allRes       = RoomReservation::with('user')->orderBy('date','desc')->orderBy('hour')->get();
+        $rooms        = \Cache::remember('rooms_all', 3600, fn() => CompanyRoom::all());
+        $allRes       = RoomReservation::with('user')->orderBy('date','desc')->orderBy('hour')->limit(50)->get();
         $myRes        = RoomReservation::with('user')->where('user_id', session('user_id'))->orderBy('date','desc')->get();
         $todayRes     = RoomReservation::where('date', $today)->get();
         return view('rooms.index', compact('rooms','allRes','myRes','todayRes'));
@@ -39,15 +39,19 @@ class RoomController extends Controller
             'reason.required'     => 'Indica el motivo de la reserva.',
         ]);
 
-        RoomReservation::create([
-            'user_id'  => session('user_id'),
-            'room'     => $request->room,
-            'date'     => $request->date,
-            'hour'     => $request->hour,
-            'duration' => $request->duration,
-            'reason'   => $request->reason,
-            'status'   => 'pendiente',
-        ]);
+\DB::transaction(function () use ($request) {
+            RoomReservation::create([
+                'user_id'  => session('user_id'),
+                'room'     => $request->room,
+                'date'     => $request->date,
+                'hour'     => $request->hour,
+                'duration' => $request->duration,
+                'reason'   => $request->reason,
+                'status'   => 'pendiente',
+            ]);
+        });
+
+        \Cache::forget('rooms_all');
 
         return redirect()->route('rooms.index')->with('success', 'Reserva solicitada correctamente. Pendiente de confirmación.');
     }

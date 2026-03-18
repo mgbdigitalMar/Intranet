@@ -234,6 +234,16 @@ textarea.form-control{resize:vertical;min-height:90px;}
   .stats-grid{grid-template-columns:1fr 1fr;}
   .two-col,.three-col,.four-col{grid-template-columns:1fr;}
   .form-row{grid-template-columns:1fr;}
+  .topbar{padding:14px 16px;}
+  .page-body{padding:20px;}
+  .table-wrap table{font-size:12px;}
+  th,td{padding:8px 10px;}
+}
+
+/* Tablet */
+@media(max-width:1200px) and (min-width:901px){
+  .four-col{grid-template-columns:repeat(2,1fr);}
+  .three-col{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
@@ -314,6 +324,7 @@ textarea.form-control{resize:vertical;min-height:90px;}
       <p>{{ now()->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</p>
     </div>
     <div class="topbar-right">
+      <button class="btn-icon sidebar-toggle" id="sidebarToggle" title="Menú">☰</button>
       <span class="date-chip">{{ now()->format('d/m/Y') }}</span>
       <div class="avatar" style="cursor:pointer" title="{{ session('user_name') }}">{{ strtoupper(substr(session('user_name','?'),0,2)) }}</div>
     </div>
@@ -353,6 +364,24 @@ setTimeout(() => {
     setTimeout(() => el.remove(), 400);
   });
 }, 5000);
+
+// Mobile sidebar toggle
+document.addEventListener('DOMContentLoaded', function() {
+  const toggle = document.getElementById('sidebarToggle');
+  const sidebar = document.getElementById('sidebar');
+  if (toggle && sidebar) {
+    toggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+  }
+  
+  // Close sidebar on outside click
+  document.addEventListener('click', (e) => {
+    if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      sidebar.classList.remove('open');
+    }
+  });
+});
 </script>
 </body>
 </html>

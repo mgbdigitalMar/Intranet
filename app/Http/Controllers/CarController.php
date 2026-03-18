@@ -12,9 +12,9 @@ class CarController extends Controller
     public function index()
     {
         $today  = now()->toDateString();
-        $cars   = CompanyCar::all();
-        $allRes = CarReservation::with('user')->orderBy('date','desc')->get();
-        $myRes  = CarReservation::with('user')->where('user_id', session('user_id'))->orderBy('date','desc')->get();
+        $cars   = \Cache::remember('cars_all', 3600, fn() => CompanyCar::all());
+        $allRes = CarReservation::with('user')->latest('date')->limit(50)->get();
+        $myRes  = CarReservation::with('user')->where('user_id', session('user_id'))->latest('date')->get();
         return view('cars.index', compact('cars','allRes','myRes','today'));
     }
 
@@ -37,15 +37,19 @@ class CarController extends Controller
             'date.after_or_equal'  => 'La fecha no puede ser anterior a hoy.',
         ]);
 
-        CarReservation::create([
-            'user_id'     => session('user_id'),
-            'car'         => $request->car,
-            'date'        => $request->date,
-            'hour'        => $request->hour,
-            'destination' => $request->destination,
-            'reason'      => $request->reason,
-            'status'      => 'pendiente',
-        ]);
+        \DB::transaction(function () use ($request) {
+            CarReservation::create([
+                'user_id'     => session('user_id'),
+                'car'         => $request->car,
+                'date'        => $request->date,
+                'hour'        => $request->hour,
+                'destination' => $request->destination,
+                'reason'      => $request->reason,
+                'status'      => 'pendiente',
+            ]);
+        });
+
+        \Cache::forget('cars_all');
 
         return redirect()->route('cars.index')->with('success', 'Reserva de vehículo solicitada. Pendiente de confirmación.');
     }
