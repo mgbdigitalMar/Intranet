@@ -273,6 +273,9 @@ textarea.form-control{resize:vertical;min-height:90px;}
 </head>
 <body>
 
+{{-- SIDEBAR OVERLAY --}}
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 {{-- SIDEBAR --}}
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
@@ -392,18 +395,26 @@ setTimeout(() => {
 document.addEventListener('DOMContentLoaded', function() {
   const toggle = document.getElementById('sidebarToggle');
   const sidebar = document.getElementById('sidebar');
-  if (toggle && sidebar) {
-    toggle.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-    });
+  const overlay = document.getElementById('sidebarOverlay');
+  
+  function toggleSidebar() {
+    sidebar.classList.toggle('open');
+    if(sidebar.classList.contains('open')) {
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    } else {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
   }
   
-  // Close sidebar on outside click
-  document.addEventListener('click', (e) => {
-    if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
-      sidebar.classList.remove('open');
-    }
-  });
+  if (toggle && sidebar) {
+    toggle.addEventListener('click', toggleSidebar);
+  }
+  
+  if (overlay) {
+    overlay.addEventListener('click', toggleSidebar);
+  }
 });
 </script>
 </body>
