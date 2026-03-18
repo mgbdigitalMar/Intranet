@@ -7,6 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 @vite(['resources/css/app.css'])
 @stack('css')
+<script>
+  const theme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+</script>
 </head>
 <body>
 
@@ -89,6 +93,7 @@
     </div>
     <div class="topbar-right">
       <span class="date-chip">{{ now()->format('d/m/Y') }}</span>
+      <button id="themeToggle" class="btn btn-ghost btn-icon" title="Cambiar tema">☀️</button>
       <div class="avatar sidebar-toggle" id="sidebarToggle" style="cursor:pointer" title="{{ session('user_name') }} - Click para menú">{{ strtoupper(substr(session('user_name','?'),0,2)) }}</div>
     </div>
   </div>
@@ -151,6 +156,21 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (overlay) {
     overlay.addEventListener('click', toggleSidebar);
+  }
+
+  // Theme toggle
+  const themeToggleBtn = document.getElementById('themeToggle');
+  const updateIcon = () => {
+    themeToggleBtn.innerHTML = document.documentElement.getAttribute('data-theme') === 'light' ? '🌙' : '☀️';
+  };
+  if (themeToggleBtn) {
+    updateIcon();
+    themeToggleBtn.addEventListener('click', () => {
+      const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateIcon();
+    });
   }
 });
 </script>

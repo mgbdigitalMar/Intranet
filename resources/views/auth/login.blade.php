@@ -12,6 +12,12 @@ html,body{overflow-x:hidden;max-width:100vw;}
   --text:#e8ecf5;--text2:#8b97b8;--primary:#4f79f7;--primary-light:#6b8ff9;
   --primary-dim:rgba(79,121,247,.12);--red:#f74f6e;--red-dim:rgba(247,79,110,.12);
   --green:#4fca8a;--green-dim:rgba(79,202,138,.12);}
+[data-theme="light"]{
+  --bg:#f3f4f6;--surface:#ffffff;--surface2:#f9fafb;--border:#e5e7eb;
+  --text:#111827;--text2:#4b5563;--primary:#3b82f6;--primary-light:#60a5fa;
+  --primary-dim:rgba(59,130,246,.12);--red:#dc2626;--red-dim:rgba(220,38,38,.12);
+  --green:#059669;--green-dim:rgba(5,150,105,.12);
+}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);
   min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -67,8 +73,15 @@ h2{font-size:26px;font-weight:700;margin-bottom:5px;}
   .demo-box{font-size:10px;padding:10px;}
 }
 </style>
+<script>
+  const theme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+</script>
 </head>
 <body>
+
+<button id="themeToggle" style="position:absolute;top:24px;right:24px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.1);transition:all .2s;" title="Cambiar tema">☀️</button>
+
 <div class="card">
   <div class="logo">
     <div class="logo-icon">🏢</div>
@@ -107,5 +120,19 @@ h2{font-size:26px;font-weight:700;margin-bottom:5px;}
     <strong>👤 Empleado:</strong> luis@empresa.com / emp123
   </div>
 </div>
+
+<script>
+  const themeToggleBtn = document.getElementById('themeToggle');
+  const updateIcon = () => {
+    themeToggleBtn.innerHTML = document.documentElement.getAttribute('data-theme') === 'light' ? '🌙' : '☀️';
+  };
+  updateIcon();
+  themeToggleBtn.addEventListener('click', () => {
+    const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateIcon();
+  });
+</script>
 </body>
 </html>
