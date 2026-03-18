@@ -15,7 +15,7 @@ Estado: ✅ Pendiente / ⏳ En progreso / ✅ Completado
 
 ## 3. Responsive Design
 - ✅ resources/views/layouts/app.blade.php → Mobile menu JS/CSS
-- [ ] resources/css/app.css → Tailwind build + responsive tables
+- ✅ resources/css/app.css → Estilos CSS extraídos y responsividad mejorada
 
 ## 4. Data Reliability (Controllers)
 - ✅ Sample controllers (CarController, RoomController) → Transactions + eager loading
