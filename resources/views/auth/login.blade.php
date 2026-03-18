@@ -84,7 +84,7 @@ h2{font-size:26px;font-weight:700;margin-bottom:5px;}
 
 <div class="card">
   <div class="logo">
-    <div class="logo-icon">🏢</div>
+    <img src="{{ asset('logo.png') }}" alt="Intranet Logo" class="logo-icon">
     <h1>Intra<span>Net</span></h1>
   </div>
   <h2>Bienvenido de nuevo</h2>
