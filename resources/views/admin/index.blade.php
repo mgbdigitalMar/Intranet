@@ -34,24 +34,6 @@
   </div>
 </div>
 
-{{-- Stats --}}
-<div class="stats-grid" style="margin-bottom:24px">
-  @foreach([
-    ['blue','👥',$stats['employees'],'Empleados'],
-    ['amber','📰',$stats['news'],'Publicaciones'],
-    ['green','🛒',$stats['purchases'],'Solicitudes compra'],
-    ['purple','🏖️',$stats['absences'],'Ausencias'],
-    ['red','🚪',$pendingRooms->count(),'Salas pendientes'],
-    ['teal','🚗',$pendingCars->count(),'Vehículos pendientes'],
-  ] as [$color,$icon,$val,$label])
-  <div class="stat-card {{ $color }}">
-    <div class="stat-icon">{{ $icon }}</div>
-    <div class="stat-val">{{ $val }}</div>
-    <div class="stat-label">{{ $label }}</div>
-  </div>
-  @endforeach
-</div>
-
 {{-- Pending purchases + pending absences --}}
 <div class="two-col" style="margin-bottom:20px; align-items: flex-start;">
 
@@ -212,9 +194,6 @@
       </div>
     </div>
     @endforeach
-  </div>
-  <div style="margin-top:14px">
-    <a href="{{ route('employees.create') }}" class="btn btn-primary btn-sm">+ Añadir nuevo empleado</a>
   </div>
 </div>
 
