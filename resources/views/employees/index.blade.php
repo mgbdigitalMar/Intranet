@@ -5,12 +5,12 @@
 <div class="page-header">
   <div><h2>Directorio de Empleados</h2><p>Todos los miembros del equipo</p></div>
   <div class="page-header-actions">
-    <form action="{{ route('employees.index') }}" method="GET" style="display:flex;gap:8px;flex-wrap:wrap">
+    <form action="{{ route('employees.index') }}" method="GET" style="display:flex;gap:8px;flex-wrap:wrap;width:100%">
       <div class="search-bar">
-        🔍
+        <span>🔍</span>
         <input type="text" name="search" placeholder="Buscar por nombre, cargo..." value="{{ request('search') }}">
       </div>
-      <select name="department" class="form-control" style="width:auto;padding:8px 12px">
+      <select name="department" class="form-control" style="width:auto;min-width:150px">
         <option value="">Todos los departamentos</option>
         @foreach($departments as $dept)
           <option value="{{ $dept }}" {{ request('department')===$dept?'selected':'' }}>{{ $dept }}</option>
@@ -18,7 +18,7 @@
       </select>
       <button type="submit" class="btn btn-ghost">Filtrar</button>
       @if(request('search') || request('department'))
-        <a href="{{ route('employees.index') }}" class="btn btn-ghost">✕ Limpiar</a>
+        <a href="{{ route('employees.index') }}" class="btn btn-ghost">✕</a>
       @endif
     </form>
     @if(session('user_role')==='admin')
@@ -53,10 +53,10 @@
     @endif
 
     @if(session('user_role')==='admin')
-    <div style="display:flex;gap:8px;margin-top:14px;justify-content:center">
-      <a href="{{ route('employees.edit', $emp->id) }}" class="btn btn-sm btn-ghost">✏️ Editar</a>
+    <div style="display:flex;gap:8px;margin-top:14px;justify-content:center;flex-wrap:wrap">
+      <a href="{{ route('employees.edit', $emp->id) }}" class="btn btn-sm btn-ghost">✏️</a>
       @if($emp->id !== session('user_id'))
-      <form action="{{ route('employees.destroy', $emp->id) }}" method="POST" onsubmit="return confirm('¿Eliminar a {{ $emp->name }}? Esta acción no se puede deshacer.')">
+      <form action="{{ route('employees.destroy', $emp->id) }}" method="POST" onsubmit="return confirm('¿Eliminar a {{ $emp->name }}?')">
         @csrf @method('DELETE')
         <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
       </form>

@@ -13,13 +13,13 @@
   @php
     $todayReserved = $allRes->where('car', $car->fullName())->where('date', now()->toDateString())->where('status','confirmada')->first();
   @endphp
-  <div class="card" style="text-align:center">
-    <div style="font-size:36px;margin-bottom:8px">🚗</div>
-    <div style="font-weight:700;font-size:15px;margin-bottom:2px">{{ $car->name }}</div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">{{ $car->plate }} · {{ $car->model }}</div>
+  <div class="card resource-card">
+    <div class="rc-icon" style="font-size:36px;margin-bottom:8px">🚗</div>
+    <div class="rc-name" style="font-weight:700;font-size:15px;margin-bottom:2px">{{ $car->name }}</div>
+    <div class="rc-meta" style="font-size:12px;color:var(--text2);margin-bottom:10px">{{ $car->plate }} · {{ $car->model }}</div>
     <span class="tag {{ $todayReserved?'tag-red':'tag-green' }}">{{ $todayReserved?'🔴 Reservado hoy':'🟢 Disponible' }}</span>
     @if($todayReserved)
-      <div style="font-size:11px;color:var(--text2);margin-top:6px">Destino: {{ $todayReserved->destination }}</div>
+      <div class="rc-meta" style="font-size:11px;color:var(--text2);margin-top:6px">Destino: {{ $todayReserved->destination }}</div>
     @endif
   </div>
   @endforeach

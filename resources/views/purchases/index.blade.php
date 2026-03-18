@@ -10,14 +10,12 @@
 {{-- Catalog quick buttons --}}
 <div class="card" style="margin-bottom:20px">
   <div class="card-title">🛒 Catálogo rápido</div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
+  <div class="quick-catalog">
     @foreach([['💻','Portátil'],['🖥️','Monitor'],['⌨️','Teclado'],['🖱️','Ratón'],['🖨️','Impresora'],['📱','Móvil'],['🎧','Auriculares'],['💺','Silla ergo.']] as [$icon,$name])
     <a href="{{ route('purchases.create') }}?item={{ urlencode("$icon $name") }}"
-       style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;
-              padding:14px 16px;text-align:center;min-width:100px;transition:all .15s;text-decoration:none"
-       onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="font-size:26px;margin-bottom:4px">{{ $icon }}</div>
-      <div style="font-size:12px;font-weight:600;color:var(--text2)">{{ $name }}</div>
+       class="quick-catalog-item">
+       <div class="qc-icon">{{ $icon }}</div>
+       <div class="qc-name">{{ $name }}</div>
     </a>
     @endforeach
   </div>

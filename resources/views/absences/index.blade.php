@@ -26,7 +26,7 @@
             @if($ab->status==='pendiente')
             <form action="{{ route('absences.destroy', $ab->id) }}" method="POST" onsubmit="return confirm('¿Eliminar esta notificación?')">
               @csrf @method('DELETE')
-              <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+              <button type="submit" class="btn btn-sm btn-danger btn-icon-sm">🗑️</button>
             </form>
             @endif
           </td>
