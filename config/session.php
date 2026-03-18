@@ -169,7 +169,7 @@ return [
     |
     */
 
-'secure' => env('SESSION_SECURE_COOKIE', false),
+    'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', true),
 
     /*
     |--------------------------------------------------------------------------
