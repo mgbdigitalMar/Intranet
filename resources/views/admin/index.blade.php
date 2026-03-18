@@ -1,5 +1,24 @@
 @extends('layouts.app')
 @section('title','Panel de Administración')
+
+@push('css')
+<style>
+  .admin-banner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .page-header-actions {
+    flex-wrap: wrap;
+    gap: 12px
+  }
+</style>
+@endpush
+
 @section('content')
 
 <div class="admin-banner">
@@ -8,7 +27,7 @@
 
 <div class="page-header">
   <div><h2>⚙️ Panel de Administración</h2><p>Gestión completa del portal corporativo</p></div>
-  <div class="page-header-actions">
+  <div class="page-header-actions" style="flex-wrap: wrap; gap: 12px;">
     <a href="{{ route('admin.rooms-config') }}" class="btn btn-ghost">🚪 Gestionar Salas</a>
     <a href="{{ route('admin.cars-config') }}" class="btn btn-ghost">🚗 Gestionar Vehículos</a>
     <a href="{{ route('employees.create') }}" class="btn btn-primary">+ Añadir empleado</a>
@@ -22,6 +41,8 @@
     ['amber','📰',$stats['news'],'Publicaciones'],
     ['green','🛒',$stats['purchases'],'Solicitudes compra'],
     ['purple','🏖️',$stats['absences'],'Ausencias'],
+    ['red','🚪',$pendingRooms->count(),'Salas pendientes'],
+    ['teal','🚗',$pendingCars->count(),'Vehículos pendientes'],
   ] as [$color,$icon,$val,$label])
   <div class="stat-card {{ $color }}">
     <div class="stat-icon">{{ $icon }}</div>
@@ -32,7 +53,7 @@
 </div>
 
 {{-- Pending purchases + pending absences --}}
-<div class="two-col" style="margin-bottom:20px">
+<div class="two-col" style="margin-bottom:20px; align-items: flex-start;">
 
   {{-- Pending purchases --}}
   <div class="card">
@@ -44,29 +65,7 @@
     @if($pendingPurchases->isEmpty())
       <div class="empty"><p>Sin solicitudes pendientes ✅</p></div>
     @else
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Empleado</th><th>Artículo</th><th>Cant.</th><th>Acciones</th></tr></thead>
-        <tbody>
-          @foreach($pendingPurchases as $p)
-          <tr>
-            <td>{{ $p->user->name }}</td>
-            <td title="{{ $p->reason }}"><strong>{{ $p->item }}</strong></td>
-            <td>{{ $p->quantity }}</td>
-            <td style="display:flex;gap:6px;flex-wrap:wrap">
-              <form action="{{ route('purchases.approve', $p->id) }}" method="POST">
-                @csrf <button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button>
-              </form>
-              <form action="{{ route('purchases.reject', $p->id) }}" method="POST">
-                @csrf <button type="submit" class="btn btn-sm btn-danger">❌ Rechazar</button>
-              </form>
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-<div class="data-grid stagger">
+    <div class="data-grid stagger">
       @foreach($pendingPurchases as $p)
       <div class="data-card">
         <div class="data-card-header">
@@ -95,29 +94,7 @@
     @if($pendingAbsences->isEmpty())
       <div class="empty"><p>Sin ausencias pendientes ✅</p></div>
     @else
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Empleado</th><th>Tipo</th><th>Fechas</th><th>Acciones</th></tr></thead>
-        <tbody>
-          @foreach($pendingAbsences as $ab)
-          <tr>
-            <td>{{ $ab->user->name }}</td>
-            <td>{{ $ab->type }}</td>
-            <td>{{ $ab->start_date->format('d/m') }}–{{ $ab->end_date->format('d/m/Y') }}</td>
-            <td style="display:flex;gap:6px;flex-wrap:wrap">
-              <form action="{{ route('absences.approve', $ab->id) }}" method="POST">
-                @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
-              </form>
-              <form action="{{ route('absences.reject', $ab->id) }}" method="POST">
-                @csrf <button type="submit" class="btn btn-sm btn-danger">❌</button>
-              </form>
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-<div class="data-grid stagger">
+    <div class="data-grid stagger">
       @foreach($pendingAbsences as $ab)
       <div class="data-card">
         <div class="data-card-header">
@@ -140,7 +117,7 @@
 </div>
 
 {{-- Pending rooms + pending cars --}}
-<div class="two-col" style="margin-bottom:20px">
+<div class="two-col" style="margin-bottom:20px; align-items: flex-start;">
 
   <div class="card">
     <div class="card-title">🚪 Salas pendientes
@@ -149,30 +126,7 @@
     @if($pendingRooms->isEmpty())
       <div class="empty"><p>Sin reservas pendientes ✅</p></div>
     @else
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Sala</th><th>Fecha</th><th>Empleado</th><th>Acción</th></tr></thead>
-        <tbody>
-          @foreach($pendingRooms as $r)
-          <tr>
-            <td>{{ $r->room }}</td>
-            <td>{{ $r->date->format('d/m') }} {{ $r->hour }}</td>
-            <td>{{ $r->user->name }}</td>
-            <td style="display:flex;gap:6px;flex-wrap:wrap">
-              <form action="{{ route('rooms.approve', $r->id) }}" method="POST" style="display:inline">
-                @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
-              </form>
-              <form action="{{ route('rooms.destroy', $r->id) }}" method="POST" style="display:inline">
-                @csrf @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-danger">❌</button>
-              </form>
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-<div class="data-grid stagger">
+    <div class="data-grid stagger">
       @foreach($pendingRooms as $r)
       <div class="data-card">
         <div class="data-card-header">
@@ -199,29 +153,6 @@
     @if($pendingCars->isEmpty())
       <div class="empty"><p>Sin reservas pendientes ✅</p></div>
     @else
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Vehículo</th><th>Fecha</th><th>Empleado</th><th>Acción</th></tr></thead>
-        <tbody>
-          @foreach($pendingCars as $c)
-          <tr>
-            <td>{{ Str::before($c->car,' (') }}</td>
-            <td>{{ $c->date->format('d/m') }} {{ $c->hour }}</td>
-            <td>{{ $c->user->name }}</td>
-            <td style="display:flex;gap:6px;flex-wrap:wrap">
-              <form action="{{ route('cars.approve', $c->id) }}" method="POST" style="display:inline">
-                @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
-              </form>
-              <form action="{{ route('cars.destroy', $c->id) }}" method="POST" style="display:inline">
-                @csrf @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-danger">❌</button>
-              </form>
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
     <div class="data-grid">
       @foreach($pendingCars as $c)
       <div class="data-card">
@@ -247,50 +178,7 @@
 {{-- Employees table --}}
 <div class="card">
   <div class="card-title">👥 Gestión de empleados</div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Nombre</th><th>Email</th><th>Dpto.</th><th>Cargo</th><th>Rol</th><th>Acciones</th></tr></thead>
-      <tbody>
-        @foreach($employees as $emp)
-        <tr>
-          <td>
-            <div style="display:flex;align-items:center;gap:10px">
-              <div class="avatar" style="width:30px;height:30px;font-size:11px;flex-shrink:0">{{ $emp->initials() }}</div>
-              <strong>{{ $emp->name }}</strong>
-            </div>
-          </td>
-          <td>{{ $emp->email }}</td>
-          <td>{{ $emp->department }}</td>
-          <td>{{ $emp->position }}</td>
-          <td>
-            @if($emp->isAdmin())
-              <span class="badge-admin">⭐ Admin</span>
-            @else
-              <span style="color:var(--text2);font-size:13px">👤 Empleado</span>
-            @endif
-          </td>
-          <td style="display:flex;gap:6px;flex-wrap:wrap">
-            <a href="{{ route('employees.edit', $emp->id) }}" class="btn btn-sm btn-ghost">✏️ Editar</a>
-            @if($emp->id !== session('user_id'))
-            <form action="{{ route('employees.toggleRole', $emp->id) }}" method="POST">
-              @csrf
-              <button type="submit" class="btn btn-sm btn-amber" title="Cambiar rol">
-                {{ $emp->isAdmin() ? '⬇️ Quitar admin' : '⬆️ Hacer admin' }}
-              </button>
-            </form>
-            <form action="{{ route('employees.destroy', $emp->id) }}" method="POST"
-              onsubmit="return confirm('¿Eliminar a {{ $emp->name }}?')">
-              @csrf @method('DELETE')
-              <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
-            </form>
-            @endif
-          </td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
-  </div>
-<div class="data-grid stagger">
+  <div class="data-grid stagger">
     @foreach($employees as $emp)
     <div class="data-card">
       <div class="data-card-header" style="align-items:center">

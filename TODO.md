@@ -5,5 +5,5 @@
 - [x] Step 3: Edit resources/views/admin/cars-config.blade.php - add hover effects to list items
 - [x] Step 4: Edit resources/views/admin/rooms-config.blade.php - add hover effects to list items
 - [x] Step 5: Run `npm run dev` to compile CSS
-- [ ] Step 6: Test responsiveness, then attempt_completion
+- [x] Step 6: Test responsiveness, then attempt_completion
 
