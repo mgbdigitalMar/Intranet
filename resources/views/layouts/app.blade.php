@@ -226,24 +226,43 @@ textarea.form-control{resize:vertical;min-height:90px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 
-/* ── MOBILE ── */
-@media(max-width:900px){
+/* ── RESPONSIVE (Salas, Vehículos, Compras, Ausencias, Admin) ── */
+@media(max-width:768px){
   .sidebar{transform:translateX(-100%);}
   .sidebar.open{transform:translateX(0);}
   .main{margin-left:0;}
-  .stats-grid{grid-template-columns:1fr 1fr;}
-  .two-col,.three-col,.four-col{grid-template-columns:1fr;}
+  .stats-grid,.four-col{grid-template-columns:1fr;}
+  .three-col{grid-template-columns:1fr;}
+  .two-col{grid-template-columns:1fr;}
   .form-row{grid-template-columns:1fr;}
-  .topbar{padding:14px 16px;}
-  .page-body{padding:20px;}
-  .table-wrap table{font-size:12px;}
-  th,td{padding:8px 10px;}
+  .topbar{padding:12px 16px;}
+  .page-body{padding:16px;}
+  .card{padding:18px;}
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .table-wrap table{font-size:11px;min-width:500px;}
+  th,td{padding:8px 6px;vertical-align:middle;}
+  .emp-grid{grid-template-columns:1fr;}
+  .news-grid{grid-template-columns:1fr;}
+}
+
+@media(max-width:480px){
+  .topbar h1{font-size:16px;}
+  .card{padding:14px;}
+  .card-title{font-size:14px;}
+  .table-wrap table{font-size:10px;}
+  th,td{padding:6px 4px;}
+  .btn{padding:8px 12px;font-size:13px;}
 }
 
 /* Tablet */
-@media(max-width:1200px) and (min-width:901px){
-  .four-col{grid-template-columns:repeat(2,1fr);}
+@media(min-width:769px) and (max-width:1024px){
+  .stats-grid,.four-col{grid-template-columns:1fr 1fr;}
   .three-col{grid-template-columns:1fr 1fr;}
+  .sidebar{width:260px;}
+}
+
+@media(min-width:1025px){
+  .stats-grid{grid-template-columns:repeat(4,1fr);}
 }
 </style>
 </head>
@@ -324,9 +343,8 @@ textarea.form-control{resize:vertical;min-height:90px;}
       <p>{{ now()->isoFormat('dddd, D [de] MMMM [de] YYYY') }}</p>
     </div>
     <div class="topbar-right">
-      <button class="btn-icon sidebar-toggle" id="sidebarToggle" title="Menú">☰</button>
       <span class="date-chip">{{ now()->format('d/m/Y') }}</span>
-      <div class="avatar" style="cursor:pointer" title="{{ session('user_name') }}">{{ strtoupper(substr(session('user_name','?'),0,2)) }}</div>
+      <div class="avatar sidebar-toggle" id="sidebarToggle" style="cursor:pointer" title="{{ session('user_name') }} - Click para menú">{{ strtoupper(substr(session('user_name','?'),0,2)) }}</div>
     </div>
   </div>
 
