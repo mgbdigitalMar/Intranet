@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{{ config('app.name','IntraNet') }} · @yield('title','Portal')</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 <style>
 :root{
   --bg:#0d1117;--surface:#161b27;--surface2:#1e2638;--surface3:#242d42;
@@ -228,7 +229,7 @@ textarea.form-control{resize:vertical;min-height:90px;}
 
 /* ── RESPONSIVE (Salas, Vehículos, Compras, Ausencias, Admin) ── */
 @media(max-width:768px){
-  .sidebar{transform:translateX(-100%);}
+  .sidebar{transform:translateX(-100%);transition: transform .3s ease;}
   .sidebar.open{transform:translateX(0);}
   .main{margin-left:0;}
   .stats-grid{grid-template-columns:1fr;}

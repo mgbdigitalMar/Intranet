@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IntraNet · Iniciar sesión</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('css/app.css') }}">
 <style>
 :root{--bg:#0d1117;--surface:#161b27;--surface2:#1e2638;--border:#2a3450;
   --text:#e8ecf5;--text2:#8b97b8;--primary:#4f79f7;--primary-light:#6b8ff9;
@@ -23,8 +24,8 @@ h1,h2{font-family:'Syne',sans-serif;}
   padding:46px 42px;width:420px;max-width:95vw;position:relative;z-index:1;
   box-shadow:0 0 80px rgba(79,121,247,.1),0 4px 24px rgba(0,0,0,.4);}
 .logo{display:flex;align-items:center;gap:12px;margin-bottom:30px;}
-.logo-icon{width:44px;height:44px;background:var(--primary);border-radius:12px;
-  display:flex;align-items:center;justify-content:center;font-size:20px;}
+.logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 12px rgba(79,121,247,.3);}
 .logo h1{font-size:22px;font-weight:800;letter-spacing:-.5px;}
 .logo span{color:var(--primary);}
 h2{font-size:26px;font-weight:700;margin-bottom:5px;}
@@ -33,7 +34,7 @@ h2{font-size:26px;font-weight:700;margin-bottom:5px;}
 .form-group label{display:block;font-size:12.5px;font-weight:600;color:var(--text2);margin-bottom:7px;letter-spacing:.3px;}
 .form-control{width:100%;padding:11px 14px;background:var(--surface2);border:1px solid var(--border);
   border-radius:10px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;
-  transition:border-color .2s;outline:none;}
+  transition:border-color .2s,box-shadow .2s;outline:none;}
 .form-control:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-dim);}
 .form-control::placeholder{color:#4a5670;}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
