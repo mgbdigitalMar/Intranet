@@ -2,14 +2,7 @@
 @section('title','Salas')
 
 @push('css')
-<style>
-.resource-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;transition:all .2s;}
-.resource-card:hover{border-color:var(--border2);transform:translateY(-2px);}
-.resource-card .rc-icon{font-size:28px;margin-bottom:8px;}
-.resource-card .rc-name{font-weight:700;font-size:14px;margin-bottom:3px;}
-.resource-card .rc-meta{font-size:11px;color:var(--text2);margin-bottom:10px;}
-.resource-card .rc-status{margin-top:4px;}
-</style>
+<link rel="stylesheet" href="{{ asset('css/views/resources.css') }}">
 @endpush
 
 @section('content')
@@ -80,44 +73,32 @@
 </div>
 
 {{-- All reservations --}}
-<div class="card">
-  <div class="card-title">📅 Todas las reservas</div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Sala</th><th>Fecha</th><th>Hora</th><th>Empleado</th><th>Motivo</th><th>Estado</th><th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse($allRes as $r)
-        <tr>
-          <td><strong>{{ $r->room }}</strong></td>
-          <td>{{ $r->date->format('d/m/Y') }}</td>
-          <td>{{ $r->hour }} ({{ $r->duration }}h)</td>
-          <td>{{ $r->user->name }}</td>
-          <td>{{ $r->reason }}</td>
-          <td>@include('partials.status', ['status' => $r->status])</td>
-          <td style="display:flex;gap:6px;flex-wrap:wrap">
-            @if(session('user_role')==='admin' && $r->status==='pendiente')
-            <form action="{{ route('rooms.approve', $r->id) }}" method="POST">
-              @csrf <button type="submit" class="btn btn-sm btn-success">✅</button>
-            </form>
-            @endif
-            @if(session('user_role')==='admin' || $r->user_id===session('user_id'))
-            <form action="{{ route('rooms.destroy', $r->id) }}" method="POST" onsubmit="return confirm('¿Cancelar reserva?')">
-              @csrf @method('DELETE')
-              <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
-            </form>
-            @endif
-          </td>
-        </tr>
-        @empty
-        <tr><td colspan="7" style="text-align:center;padding:30px;color:var(--text2)">Sin reservas registradas</td></tr>
-        @endforelse
-      </tbody>
-    </table>
+<h3 style="margin-bottom:16px;font-size:18px">📅 Todas las reservas</h3>
+<div class="data-grid">
+  @forelse($allRes as $r)
+  <div class="data-card">
+    <div class="data-card-header">
+      <div class="data-card-title">🚪 {{ $r->room }}</div>
+      @include('partials.status', ['status' => $r->status])
+    </div>
+    <div class="data-card-body">
+      <div class="data-card-row"><span>👤 Empleado:</span> <strong>{{ $r->user->name }}</strong></div>
+      <div class="data-card-row"><span>📅 Fecha:</span> <strong>{{ $r->date->format('d/m/Y') }}</strong></div>
+      <div class="data-card-row"><span>⏰ Hora:</span> <strong>{{ $r->hour }} ({{ $r->duration }}h)</strong></div>
+      <div class="data-card-row"><span>📝 Motivo:</span> <strong>{{ $r->reason }}</strong></div>
+    </div>
+    <div class="data-card-footer">
+      @if(session('user_role')==='admin' && $r->status==='pendiente')
+      <form action="{{ route('rooms.approve', $r->id) }}" method="POST"><button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button>@csrf</form>
+      @endif
+      @if(session('user_role')==='admin' || $r->user_id===session('user_id'))
+      <form action="{{ route('rooms.destroy', $r->id) }}" method="POST" onsubmit="return confirm('¿Cancelar reserva?')">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-danger">🗑️ Cancelar</button></form>
+      @endif
+    </div>
   </div>
+  @empty
+  <div class="empty" style="grid-column:1/-1"><p>Sin reservas registradas</p></div>
+  @endforelse
 </div>
 
 @endsection

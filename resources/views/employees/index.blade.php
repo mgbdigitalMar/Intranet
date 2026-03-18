@@ -2,16 +2,7 @@
 @section('title','Empleados')
 
 @push('css')
-<style>
-.emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
-.emp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;transition:all .2s;}
-.emp-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 24px rgba(79,121,247,.1);}
-.emp-card .avatar{margin:0 auto 12px;}
-.emp-name{font-weight:700;font-size:15px;margin-bottom:2px;}
-.emp-role{font-size:12px;color:var(--text2);margin-bottom:10px;}
-.emp-bday{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--amber);background:var(--amber-dim);padding:4px 11px;border-radius:20px;margin-bottom:6px;}
-.emp-email{font-size:11.5px;color:var(--text3);margin-top:4px;}
-</style>
+<link rel="stylesheet" href="{{ asset('css/views/employees.css') }}">
 @endpush
 
 @section('content')

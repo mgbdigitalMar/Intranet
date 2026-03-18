@@ -88,22 +88,18 @@
   @if($recentAbsences->isEmpty())
     <div class="empty"><p>Sin ausencias registradas</p></div>
   @else
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Empleado</th><th>Tipo</th><th>Fechas</th><th>Estado</th></tr></thead>
-      <tbody>
-        @foreach($recentAbsences as $ab)
-        <tr>
-          <td><strong>{{ $ab->user->name }}</strong></td>
-          <td>{{ $ab->type }}</td>
-          <td>{{ $ab->start_date->format('d/m/Y') }}
-            @if($ab->start_date != $ab->end_date) → {{ $ab->end_date->format('d/m/Y') }} @endif
-          </td>
-          <td>@include('partials.status', ['status' => $ab->status])</td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
+  <div style="display:flex;flex-direction:column;gap:12px">
+    @foreach($recentAbsences as $ab)
+    <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <div>
+        <div style="font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px">{{ $ab->user->name }}</div>
+        <div style="font-size:12.5px;color:var(--text2)">
+          {{ $ab->type }} · {{ $ab->start_date->format('d/m/Y') }} @if($ab->start_date != $ab->end_date) → {{ $ab->end_date->format('d/m/Y') }} @endif
+        </div>
+      </div>
+      @include('partials.status', ['status' => $ab->status])
+    </div>
+    @endforeach
   </div>
   @endif
 </div>

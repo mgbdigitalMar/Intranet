@@ -2,13 +2,7 @@
 @section('title','Solicitudes de Compra')
 
 @push('css')
-<style>
-.quick-catalog{display:flex;gap:10px;flex-wrap:wrap;}
-.quick-catalog-item{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center;min-width:100px;transition:all .15s;text-decoration:none;}
-.quick-catalog-item:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(79,121,247,.15);}
-.quick-catalog-item .qc-icon{font-size:26px;margin-bottom:4px;}
-.quick-catalog-item .qc-name{font-size:12px;font-weight:600;color:var(--text2);}
-</style>
+<link rel="stylesheet" href="{{ asset('css/views/purchases.css') }}">
 @endpush
 
 @section('content')
@@ -33,58 +27,44 @@
 </div>
 
 {{-- My requests table --}}
-<div class="card">
-  <div class="card-title">📋 {{ session('user_role')==='admin'?'Todas las solicitudes':'Mis solicitudes' }}</div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Artículo</th>
-          <th>Cant.</th>
-          @if(session('user_role')==='admin')<th>Solicitante</th>@endif
-          <th>Justificación</th>
-          <th>Precio est.</th>
-          <th>Fecha</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse($items as $req)
-        <tr>
-          <td><strong>{{ $req->item }}</strong></td>
-          <td>{{ $req->quantity }}</td>
-          @if(session('user_role')==='admin')<td>{{ $req->user->name }}</td>@endif
-          <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="{{ $req->reason }}">{{ $req->reason }}</td>
-          <td>{{ $req->estimated_price ? '€'.number_format($req->estimated_price,2) : '—' }}</td>
-          <td>{{ $req->created_at->format('d/m/Y') }}</td>
-          <td>@include('partials.status', ['status'=>$req->status])</td>
-          <td style="display:flex;gap:6px;flex-wrap:wrap">
-            @if($req->status==='pendiente')
-              @if(session('user_role')==='admin')
-                <form action="{{ route('purchases.approve', $req->id) }}" method="POST">
-                  @csrf <button type="submit" class="btn btn-sm btn-success" title="Aprobar">✅</button>
-                </form>
-                <form action="{{ route('purchases.reject', $req->id) }}" method="POST">
-                  @csrf <button type="submit" class="btn btn-sm btn-danger" title="Rechazar">❌</button>
-                </form>
-              @elseif($req->user_id===session('user_id'))
-                <form action="{{ route('purchases.destroy', $req->id) }}" method="POST" onsubmit="return confirm('¿Eliminar solicitud?')">
-                  @csrf @method('DELETE')
-                  <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
-                </form>
-              @endif
-            @endif
-            @if($req->admin_notes)
-              <span title="{{ $req->admin_notes }}" style="cursor:help;font-size:18px">💬</span>
-            @endif
-          </td>
-        </tr>
-        @empty
-        <tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text2)">Sin solicitudes de compra</td></tr>
-        @endforelse
-      </tbody>
-    </table>
+<h3 style="margin-bottom:16px;font-size:18px">📋 {{ session('user_role')==='admin'?'Todas las solicitudes':'Mis solicitudes' }}</h3>
+<div class="data-grid">
+  @forelse($items as $req)
+  <div class="data-card">
+    <div class="data-card-header">
+      <div class="data-card-title">{{ $req->item }} <span style="color:var(--text2);font-weight:600">(x{{ $req->quantity }})</span></div>
+      @include('partials.status', ['status'=>$req->status])
+    </div>
+    <div class="data-card-body">
+      @if(session('user_role')==='admin')
+      <div class="data-card-row"><span>👤 Solicitante:</span> <strong>{{ $req->user->name }}</strong></div>
+      @endif
+      <div class="data-card-row"><span>📅 Fecha:</span> <strong>{{ $req->created_at->format('d/m/Y') }}</strong></div>
+      <div class="data-card-row"><span>💰 Precio est.:</span> <strong>{{ $req->estimated_price ? '€'.number_format($req->estimated_price,2) : '—' }}</strong></div>
+      <div style="background:var(--surface2);padding:10px;border-radius:8px;margin-top:4px">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:4px;font-weight:600;text-transform:uppercase">Justificación</div>
+        {{ $req->reason }}
+      </div>
+      @if($req->admin_notes)
+      <div style="background:var(--amber-dim);border:1px solid rgba(247,168,79,.2);padding:10px;border-radius:8px;color:var(--amber);margin-top:4px">
+        <div style="font-size:12px;margin-bottom:4px;font-weight:600;text-transform:uppercase">Notas del Admin</div>
+        {{ $req->admin_notes }}
+      </div>
+      @endif
+    </div>
+    @if($req->status==='pendiente')
+    <div class="data-card-footer">
+      @if(session('user_role')==='admin')
+        <form action="{{ route('purchases.approve', $req->id) }}" method="POST"><button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button>@csrf</form>
+        <form action="{{ route('purchases.reject', $req->id) }}" method="POST"><button type="submit" class="btn btn-sm btn-danger">❌ Rechazar</button>@csrf</form>
+      @elseif($req->user_id===session('user_id'))
+        <form action="{{ route('purchases.destroy', $req->id) }}" method="POST" onsubmit="return confirm('¿Eliminar solicitud?')">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-danger">🗑️ Cancelar</button></form>
+      @endif
+    </div>
+    @endif
   </div>
+  @empty
+  <div class="empty" style="grid-column:1/-1"><p>Sin solicitudes de compra</p></div>
+  @endforelse
 </div>
 @endsection
