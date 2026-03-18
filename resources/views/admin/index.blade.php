@@ -66,6 +66,22 @@
         </tbody>
       </table>
     </div>
+    <div class="data-grid">
+      @foreach($pendingPurchases as $p)
+      <div class="data-card">
+        <div class="data-card-header">
+          <div class="data-card-title" title="{{ $p->reason }}">{{ $p->item }} <span style="color:var(--text2);font-weight:600">(x{{ $p->quantity }})</span></div>
+        </div>
+        <div class="data-card-body">
+          <div class="data-card-row"><span>👤 Empleado:</span> <strong>{{ $p->user->name }}</strong></div>
+        </div>
+        <div class="data-card-footer">
+          <form action="{{ route('purchases.approve', $p->id) }}" method="POST">@csrf <button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button></form>
+          <form action="{{ route('purchases.reject', $p->id) }}" method="POST">@csrf <button type="submit" class="btn btn-sm btn-danger">❌ Rechazar</button></form>
+        </div>
+      </div>
+      @endforeach
+    </div>
     @endif
   </div>
 
@@ -100,6 +116,23 @@
           @endforeach
         </tbody>
       </table>
+    </div>
+    <div class="data-grid">
+      @foreach($pendingAbsences as $ab)
+      <div class="data-card">
+        <div class="data-card-header">
+          <div class="data-card-title">{{ $ab->user->name }}</div>
+        </div>
+        <div class="data-card-body">
+          <div class="data-card-row"><span>📝 Tipo:</span> <strong>{{ $ab->type }}</strong></div>
+          <div class="data-card-row"><span>📅 Fechas:</span> <strong>{{ $ab->start_date->format('d/m') }} – {{ $ab->end_date->format('d/m/Y') }}</strong></div>
+        </div>
+        <div class="data-card-footer">
+          <form action="{{ route('absences.approve', $ab->id) }}" method="POST">@csrf <button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button></form>
+          <form action="{{ route('absences.reject', $ab->id) }}" method="POST">@csrf <button type="submit" class="btn btn-sm btn-danger">❌ Rechazar</button></form>
+        </div>
+      </div>
+      @endforeach
     </div>
     @endif
   </div>
@@ -139,6 +172,23 @@
         </tbody>
       </table>
     </div>
+    <div class="data-grid">
+      @foreach($pendingRooms as $r)
+      <div class="data-card">
+        <div class="data-card-header">
+          <div class="data-card-title">🚪 {{ $r->room }}</div>
+        </div>
+        <div class="data-card-body">
+          <div class="data-card-row"><span>👤 Empleado:</span> <strong>{{ $r->user->name }}</strong></div>
+          <div class="data-card-row"><span>📅 Fecha:</span> <strong>{{ $r->date->format('d/m') }} {{ $r->hour }}</strong></div>
+        </div>
+        <div class="data-card-footer">
+          <form action="{{ route('rooms.approve', $r->id) }}" method="POST">@csrf <button type="submit" class="btn btn-sm btn-success">✅</button></form>
+          <form action="{{ route('rooms.destroy', $r->id) }}" method="POST">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-danger">❌</button></form>
+        </div>
+      </div>
+      @endforeach
+    </div>
     @endif
   </div>
 
@@ -171,6 +221,23 @@
           @endforeach
         </tbody>
       </table>
+    </div>
+    <div class="data-grid">
+      @foreach($pendingCars as $c)
+      <div class="data-card">
+        <div class="data-card-header">
+          <div class="data-card-title">🚗 {{ Str::before($c->car,' (') }}</div>
+        </div>
+        <div class="data-card-body">
+          <div class="data-card-row"><span>👤 Empleado:</span> <strong>{{ $c->user->name }}</strong></div>
+          <div class="data-card-row"><span>📅 Fecha:</span> <strong>{{ $c->date->format('d/m') }} {{ $c->hour }}</strong></div>
+        </div>
+        <div class="data-card-footer">
+          <form action="{{ route('cars.approve', $c->id) }}" method="POST">@csrf <button type="submit" class="btn btn-sm btn-success">✅</button></form>
+          <form action="{{ route('cars.destroy', $c->id) }}" method="POST">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-danger">❌</button></form>
+        </div>
+      </div>
+      @endforeach
     </div>
     @endif
   </div>
@@ -222,6 +289,41 @@
         @endforeach
       </tbody>
     </table>
+  </div>
+  <div class="data-grid">
+    @foreach($employees as $emp)
+    <div class="data-card">
+      <div class="data-card-header" style="align-items:center">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="avatar" style="width:36px;height:36px;font-size:12px;flex-shrink:0">{{ $emp->initials() }}</div>
+          <div>
+            <div class="data-card-title" style="margin-bottom:0">{{ $emp->name }}</div>
+            @if($emp->isAdmin()) <span class="badge-admin" style="margin-top:4px;display:inline-block">⭐ Admin</span> @else <span style="color:var(--text2);font-size:11px;font-weight:600">👤 Empleado</span> @endif
+          </div>
+        </div>
+      </div>
+      <div class="data-card-body">
+        <div class="data-card-row"><span>Email:</span> <strong>{{ $emp->email }}</strong></div>
+        <div class="data-card-row"><span>Dpto:</span> <strong>{{ $emp->department }}</strong></div>
+        <div class="data-card-row"><span>Cargo:</span> <strong>{{ $emp->position }}</strong></div>
+      </div>
+      <div class="data-card-footer">
+        <a href="{{ route('employees.edit', $emp->id) }}" class="btn btn-sm btn-ghost">✏️ Editar</a>
+        @if($emp->id !== session('user_id'))
+        <form action="{{ route('employees.toggleRole', $emp->id) }}" method="POST">
+          @csrf
+          <button type="submit" class="btn btn-sm btn-amber" title="Cambiar rol">
+            {{ $emp->isAdmin() ? '⬇️ Quitar admin' : '⬆️ Hacer admin' }}
+          </button>
+        </form>
+        <form action="{{ route('employees.destroy', $emp->id) }}" method="POST" onsubmit="return confirm('¿Eliminar a {{ $emp->name }}?')">
+          @csrf @method('DELETE')
+          <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+        </form>
+        @endif
+      </div>
+    </div>
+    @endforeach
   </div>
   <div style="margin-top:14px">
     <a href="{{ route('employees.create') }}" class="btn btn-primary btn-sm">+ Añadir nuevo empleado</a>
