@@ -40,9 +40,8 @@
     @if($cars->isEmpty())
       <div class="empty"><p>No hay vehículos configurados todavía.</p></div>
     @else
-    @foreach($cars as $car)
-    <div style="display:flex;align-items:center;justify-content:space-between;
-      padding:13px 0;border-bottom:1px solid var(--border)">
+@foreach($cars as $car)
+    <div class="admin-list-item">
       <div style="display:flex;align-items:center;gap:12px">
         <div style="font-size:26px">🚗</div>
         <div>

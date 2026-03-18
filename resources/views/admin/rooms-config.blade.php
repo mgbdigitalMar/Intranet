@@ -39,9 +39,8 @@
     @if($rooms->isEmpty())
       <div class="empty"><p>No hay salas configuradas todavía.</p></div>
     @else
-    @foreach($rooms as $room)
-    <div style="display:flex;align-items:center;justify-content:space-between;
-      padding:13px 0;border-bottom:1px solid var(--border)">
+@foreach($rooms as $room)
+    <div class="admin-list-item">
       <div>
         <div style="font-weight:600;font-size:14px">{{ $room->name }}</div>
         <div style="font-size:12px;color:var(--text2)">

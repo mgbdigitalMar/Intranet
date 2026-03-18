@@ -8,7 +8,7 @@
 
 <div class="page-header">
   <div><h2>⚙️ Panel de Administración</h2><p>Gestión completa del portal corporativo</p></div>
-  <div class="page-header-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+  <div class="page-header-actions">
     <a href="{{ route('admin.rooms-config') }}" class="btn btn-ghost">🚪 Gestionar Salas</a>
     <a href="{{ route('admin.cars-config') }}" class="btn btn-ghost">🚗 Gestionar Vehículos</a>
     <a href="{{ route('employees.create') }}" class="btn btn-primary">+ Añadir empleado</a>
@@ -66,7 +66,7 @@
         </tbody>
       </table>
     </div>
-    <div class="data-grid">
+<div class="data-grid stagger">
       @foreach($pendingPurchases as $p)
       <div class="data-card">
         <div class="data-card-header">
@@ -117,7 +117,7 @@
         </tbody>
       </table>
     </div>
-    <div class="data-grid">
+<div class="data-grid stagger">
       @foreach($pendingAbsences as $ab)
       <div class="data-card">
         <div class="data-card-header">
@@ -172,7 +172,7 @@
         </tbody>
       </table>
     </div>
-    <div class="data-grid">
+<div class="data-grid stagger">
       @foreach($pendingRooms as $r)
       <div class="data-card">
         <div class="data-card-header">
@@ -290,7 +290,7 @@
       </tbody>
     </table>
   </div>
-  <div class="data-grid">
+<div class="data-grid stagger">
     @foreach($employees as $emp)
     <div class="data-card">
       <div class="data-card-header" style="align-items:center">
