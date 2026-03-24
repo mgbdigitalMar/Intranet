@@ -28,18 +28,18 @@ Route::middleware('auth.custom')->group(function () {
 
     // Room Reservations - view only for employees, actions admin only
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+    Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
+    Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::middleware('admin')->group(function () {
-        Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
-        Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
         Route::delete('/rooms/{id}', [RoomController::class, 'destroy'])->name('rooms.destroy');
         Route::post('/rooms/{id}/approve', [RoomController::class, 'approve'])->name('rooms.approve');
     });
 
     // Car Reservations - view only for employees, actions admin only
     Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
+    Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
+    Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
     Route::middleware('admin')->group(function () {
-        Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
-        Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
         Route::delete('/cars/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
         Route::post('/cars/{id}/approve', [CarController::class, 'approve'])->name('cars.approve');
     });

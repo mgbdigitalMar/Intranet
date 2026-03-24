@@ -9,9 +9,7 @@
 
 <div class="page-header">
   <div><h2>Vehículos de Empresa</h2><p>Reserva un vehículo para desplazamientos corporativos</p></div>
-  @if(session('user_role') === 'admin')
-  <a href="{{ route('cars.create') }}" class="btn btn-primary">+ Reservar vehículo</a>
-  @endif
+<a href="{{ route('cars.create') }}" class="btn btn-primary">+ Reservar vehículo</a>
 </div>
 
 {{-- Fleet status --}}

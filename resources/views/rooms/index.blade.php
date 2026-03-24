@@ -9,9 +9,7 @@
 
 <div class="page-header">
   <div><h2>Reservas de Salas</h2><p>Gestiona la disponibilidad de las salas de reuniones</p></div>
-  @if(session('user_role') === 'admin')
-  <a href="{{ route('rooms.create') }}" class="btn btn-primary">+ Reservar sala</a>
-  @endif
+<a href="{{ route('rooms.create') }}" class="btn btn-primary">+ Reservar sala</a>
 </div>
 
 {{-- Room status cards --}}
