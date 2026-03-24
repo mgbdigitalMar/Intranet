@@ -26,33 +26,48 @@ class DashboardController extends Controller
             ];
         });
 
-        // Upcoming events (next 30 days)
-        $upcomingEvents = News::where('type', 'evento')
-            ->whereNotNull('event_date')
-            ->where('event_date', '>=', now())
-            ->orderBy('event_date')
-            ->limit(5)
-            ->get();
+        // Upcoming events (cached)
+        $upcomingEvents = Cache::remember('dashboard_upcoming_events', 1800, function () {
+            return News::where('type', 'evento')
+                ->whereNotNull('event_date')
+                ->where('event_date', '>=', now())
+                ->orderBy('event_date')
+                ->limit(5)
+                ->get();
+        });
 
         // Upcoming birthdays
-        $allUsers = User::whereNotNull('birthday')->get();
-        $birthdays = $allUsers->map(function ($u) {
-            return ['user' => $u, 'days' => $u->daysUntilBirthday()];
-        })->sortBy('days')->take(6)->values();
+$birthdays = Cache::remember("dashboard_birthdays_{session('user_id')}", 1800, function () {
+            return User::whereNotNull('birthday')
+                ->orderByRaw("EXTRACT(month FROM birthday), EXTRACT(day FROM birthday)")
+                ->chunk(100, function ($users) {
+                    return $users->map(fn($u) => [
+                        'user' => $u,
+                        'days' => $u->daysUntilBirthday()
+                    ])->filter(fn($b) => $b['days'] !== null);
+                })
+                ->flatten(1)
+                ->sortBy('days')
+                ->take(12)
+                ->values();
+        });
 
-        // Recent absences
-        $recentAbsences = Absence::with('user')->orderBy('created_at', 'desc')->limit(5)->get();
+        // Recent absences (cached)
+        $recentAbsences = Cache::remember('dashboard_recent_absences', 900, function () {
+            return Absence::with('user')->orderBy('created_at', 'desc')->limit(5)->get();
+        });
 
         // ALERTS
         $alerts = [];
 
-        // Birthday alerts: today and tomorrow
-        foreach ($allUsers as $u) {
+        // Birthday alerts from cached birthdays
+        foreach ($birthdays as $b) {
+            $u = $b['user'];
             if ($u->id === session('user_id')) continue;
-            $days = $u->daysUntilBirthday();
+            $days = $b['days'];
             if ($days === 0)
                 $alerts[] = ['type' => 'birthday', 'msg' => "🎉 ¡Hoy es el cumpleaños de <strong>{$u->name}</strong>!"];
-            if ($days === 1)
+            elseif ($days === 1)
                 $alerts[] = ['type' => 'birthday', 'msg' => "🎂 Mañana es el cumpleaños de <strong>{$u->name}</strong>. ¡No olvides felicitarle!"];
         }
 

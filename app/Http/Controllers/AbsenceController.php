@@ -13,8 +13,8 @@ class AbsenceController extends Controller
     public function index()
     {
         $isAdmin = session('user_role') === 'admin';
-        $mine    = Absence::with('user')->where('user_id', session('user_id'))->orderBy('start_date','desc')->get();
-        $all     = $isAdmin ? Absence::with('user')->orderBy('start_date','desc')->get() : collect();
+        $mine    = Absence::with('user')->where('user_id', session('user_id'))->orderBy('start_date','desc')->paginate(15);
+        $all     = $isAdmin ? Absence::with('user')->orderBy('start_date','desc')->paginate(15) : collect();
         return view('absences.index', ['mine' => $mine, 'all' => $all, 'types' => $this->types]);
     }
 

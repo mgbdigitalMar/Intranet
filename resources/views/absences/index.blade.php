@@ -27,9 +27,15 @@
     </div>
     @endif
   </div>
-  @empty
+@empty
   <div class="empty" style="grid-column:1/-1"><p>No has notificado ninguna ausencia todavía</p></div>
   @endforelse
+
+@if(isset($mine) && $mine instanceof \Illuminate\Pagination\LengthAwarePaginator)
+<div style="margin-top:20px;display:flex;justify-content:center">
+  {{ $mine->links() }}
+</div>
+@endif
 </div>
 
 {{-- Admin: all absences --}}
@@ -56,9 +62,15 @@
       <form action="{{ route('absences.destroy', $ab->id) }}" method="POST" onsubmit="return confirm('¿Eliminar?')">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-ghost btn-icon">🗑️</button></form>
     </div>
   </div>
-  @empty
+@empty
   <div class="empty" style="grid-column:1/-1"><p>Sin ausencias registradas</p></div>
   @endforelse
+
+@if(isset($all) && $all instanceof \Illuminate\Pagination\LengthAwarePaginator)
+<div style="margin-top:20px;display:flex;justify-content:center">
+  {{ $all->links() }}
+</div>
+@endif
 </div>
 @endif
 

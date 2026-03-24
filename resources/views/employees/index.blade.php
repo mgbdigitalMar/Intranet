@@ -95,6 +95,10 @@
   </div>
   @endforeach
 </div>
+
+<div style="margin-top:20px;display:flex;justify-content:center">
+  {{ $employees->appends(request()->query())->links() }}
+</div>
 @endif
 
 @endsection

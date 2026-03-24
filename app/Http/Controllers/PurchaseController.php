@@ -18,8 +18,8 @@ class PurchaseController extends Controller
     {
         $isAdmin = session('user_role') === 'admin';
         $items   = $isAdmin
-            ? PurchaseRequest::with('user')->orderBy('created_at','desc')->get()
-            : PurchaseRequest::where('user_id', session('user_id'))->orderBy('created_at','desc')->get();
+            ? PurchaseRequest::with('user')->orderBy('created_at','desc')->paginate(15)
+            : PurchaseRequest::where('user_id', session('user_id'))->orderBy('created_at','desc')->paginate(15);
 
         return view('purchases.index', ['items' => $items, 'catalog' => $this->catalog]);
     }

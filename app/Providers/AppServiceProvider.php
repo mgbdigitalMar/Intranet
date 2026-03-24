@@ -20,26 +20,34 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.env') === 'production') {
+        if (app()->environment('production')) {
             URL::forceScheme('https');
         }
 
         // Optimize queries globally
         \Illuminate\Database\Eloquent\Model::preventLazyLoading(!app()->isProduction());
 
-        // Cache frequently used data (skip if Redis not ready)
-        if (app()->isProduction() && class_exists('Redis')) {
+        // Prod caching bootstrap
+        if (app()->isProduction()) {
+            $this->app->booted(function () {
+                \Illuminate\Support\Facades\Artisan::call('route:cache');
+                \Illuminate\Support\Facades\Artisan::call('config:cache');
+            });
+        }
+
+        // Global stats cache (Redis preferred)
+        if (class_exists('Redis') || config('cache.default') === 'redis') {
             try {
                 \Cache::rememberForever('app_stats', function () {
                     return [
                         'total_users' => \App\Models\User::count(),
                         'total_rooms' => \App\Models\CompanyRoom::count(),
                         'total_cars' => \App\Models\CompanyCar::count(),
+                        'total_absences' => \App\Models\Absence::count(),
+                        'pending_purchases' => \App\Models\PurchaseRequest::where('status', 'pendiente')->count(),
                     ];
                 });
-            } catch (\Exception $e) {
-                // Skip cache if Redis unavailable
-            }
+            } catch (\Exception $e) {}
         }
     }
 }

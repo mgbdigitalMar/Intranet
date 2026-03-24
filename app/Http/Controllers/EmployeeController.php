@@ -21,7 +21,7 @@ class EmployeeController extends Controller
             });
         }
         if ($request->department) $query->where('department', $request->department);
-        $employees   = $query->get();
+        $employees   = $query->paginate(15);
         $departments = $this->departments;
         return view('employees.index', compact('employees','departments'));
     }

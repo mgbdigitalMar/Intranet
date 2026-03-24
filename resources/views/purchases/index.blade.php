@@ -63,8 +63,12 @@
     </div>
     @endif
   </div>
-  @empty
+@empty
   <div class="empty" style="grid-column:1/-1"><p>Sin solicitudes de compra</p></div>
   @endforelse
+
+<div style="margin-top:20px;display:flex;justify-content:center">
+  {{ $items->links() }}
+</div>
 </div>
 @endsection
