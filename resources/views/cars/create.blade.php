@@ -1,3 +1,7 @@
+@if(session('user_role') !== 'admin')
+  @redirect(route('cars.index'), 302, ['error' => 'Solo administradores pueden crear reservas.'])
+@endif
+
 @extends('layouts.app')
 @section('title','Reservar Vehículo')
 @section('content')

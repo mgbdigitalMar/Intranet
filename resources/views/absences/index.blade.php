@@ -4,7 +4,9 @@
 
 <div class="page-header">
   <div><h2>Ausencias</h2><p>Notifica tus ausencias con antelación</p></div>
+  @if(session('user_role') === 'admin')
   <a href="{{ route('absences.create') }}" class="btn btn-primary">+ Notificar ausencia</a>
+  @endif
 </div>
 
 {{-- My absences --}}
@@ -21,11 +23,6 @@
       <div class="data-card-row"><span>📅 Fin:</span> <strong>{{ $ab->end_date->format('d/m/Y') }} ({{ $ab->start_date->diffInDays($ab->end_date) + 1 }}d)</strong></div>
       <div class="data-card-row"><span>📝 Motivo:</span> <strong>{{ $ab->reason ?: '—' }}</strong></div>
     </div>
-    @if($ab->status==='pendiente')
-    <div class="data-card-footer">
-      <form action="{{ route('absences.destroy', $ab->id) }}" method="POST" onsubmit="return confirm('¿Eliminar esta notificación?')">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-danger">🗑️ Eliminar</button></form>
-    </div>
-    @endif
   </div>
   @empty
   <div class="empty" style="grid-column:1/-1"><p>No has notificado ninguna ausencia todavía</p></div>

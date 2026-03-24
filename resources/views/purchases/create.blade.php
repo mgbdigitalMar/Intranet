@@ -1,3 +1,7 @@
+@if(session('user_role') !== 'admin')
+  @redirect(route('purchases.index'), 302, ['error' => 'Solo administradores pueden crear solicitudes.'])
+@endif
+
 @extends('layouts.app')
 @section('title','Nueva Solicitud')
 @section('content')

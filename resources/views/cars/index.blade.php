@@ -9,7 +9,9 @@
 
 <div class="page-header">
   <div><h2>Vehículos de Empresa</h2><p>Reserva un vehículo para desplazamientos corporativos</p></div>
+  @if(session('user_role') === 'admin')
   <a href="{{ route('cars.create') }}" class="btn btn-primary">+ Reservar vehículo</a>
+  @endif
 </div>
 
 {{-- Fleet status --}}
@@ -46,11 +48,11 @@
       <div class="data-card-row"><span>📝 Motivo:</span> <strong>{{ $r->reason ?: '—' }}</strong></div>
     </div>
     <div class="data-card-footer">
-      @if(session('user_role')==='admin' && $r->status==='pendiente')
-      <form action="{{ route('cars.approve', $r->id) }}" method="POST"><button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button>@csrf</form>
-      @endif
-      @if(session('user_role')==='admin' || $r->user_id===session('user_id'))
-      <form action="{{ route('cars.destroy', $r->id) }}" method="POST" onsubmit="return confirm('¿Cancelar reserva?')">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-danger">🗑️ Cancelar</button></form>
+      @if(session('user_role')==='admin')
+        @if($r->status==='pendiente')
+        <form action="{{ route('cars.approve', $r->id) }}" method="POST"><button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button>@csrf</form>
+        @endif
+        <form action="{{ route('cars.destroy', $r->id) }}" method="POST" onsubmit="return confirm('¿Cancelar reserva?')">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-danger">🗑️ Cancelar</button></form>
       @endif
     </div>
   </div>

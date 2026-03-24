@@ -9,10 +9,13 @@
 
 <div class="page-header">
   <div><h2>Solicitudes de Compra</h2><p>Solicita equipamiento para tu puesto de trabajo</p></div>
+  @if(session('user_role') === 'admin')
   <a href="{{ route('purchases.create') }}" class="btn btn-primary">+ Nueva solicitud</a>
+  @endif
 </div>
 
 {{-- Catalog quick buttons --}}
+@if(session('user_role') === 'admin')
 <div class="card" style="margin-bottom:20px">
   <div class="card-title">🛒 Catálogo rápido</div>
   <div class="quick-catalog">
@@ -25,8 +28,9 @@
     @endforeach
   </div>
 </div>
+@endif
 
-{{-- My requests table --}}
+{{-- All requests table --}}
 <h3 style="margin-bottom:16px;font-size:18px">📋 {{ session('user_role')==='admin'?'Todas las solicitudes':'Mis solicitudes' }}</h3>
 <div class="data-grid">
   @forelse($items as $req)
@@ -52,14 +56,11 @@
       </div>
       @endif
     </div>
-    @if($req->status==='pendiente')
+    @if($req->status==='pendiente' && session('user_role') === 'admin')
     <div class="data-card-footer">
-      @if(session('user_role')==='admin')
-        <form action="{{ route('purchases.approve', $req->id) }}" method="POST"><button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button>@csrf</form>
-        <form action="{{ route('purchases.reject', $req->id) }}" method="POST"><button type="submit" class="btn btn-sm btn-danger">❌ Rechazar</button>@csrf</form>
-      @elseif($req->user_id===session('user_id'))
-        <form action="{{ route('purchases.destroy', $req->id) }}" method="POST" onsubmit="return confirm('¿Eliminar solicitud?')">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-danger">🗑️ Cancelar</button></form>
-      @endif
+      <form action="{{ route('purchases.approve', $req->id) }}" method="POST"><button type="submit" class="btn btn-sm btn-success">✅ Aprobar</button>@csrf</form>
+      <form action="{{ route('purchases.reject', $req->id) }}" method="POST"><button type="submit" class="btn btn-sm btn-danger">❌ Rechazar</button>@csrf</form>
+      <form action="{{ route('purchases.destroy', $req->id) }}" method="POST" onsubmit="return confirm('¿Eliminar solicitud?')">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-ghost btn-icon">🗑️</button></form>
     </div>
     @endif
   </div>

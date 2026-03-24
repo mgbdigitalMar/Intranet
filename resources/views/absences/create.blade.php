@@ -1,3 +1,7 @@
+@if(session('user_role') !== 'admin')
+  @redirect(route('absences.index'), 302, ['error' => 'Solo administradores pueden notificar ausencias.'])
+@endif
+
 @extends('layouts.app')
 @section('title','Notificar Ausencia')
 @section('content')

@@ -26,35 +26,43 @@ Route::middleware('auth.custom')->group(function () {
     // News & Events
     Route::resource('news', NewsController::class)->except(['show']);
 
-    // Room Reservations
+    // Room Reservations - view only for employees, actions admin only
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
-    Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
-    Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
-    Route::delete('/rooms/{id}', [RoomController::class, 'destroy'])->name('rooms.destroy');
-    Route::post('/rooms/{id}/approve', [RoomController::class, 'approve'])->name('rooms.approve');
+    Route::middleware('admin')->group(function () {
+        Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
+        Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
+        Route::delete('/rooms/{id}', [RoomController::class, 'destroy'])->name('rooms.destroy');
+        Route::post('/rooms/{id}/approve', [RoomController::class, 'approve'])->name('rooms.approve');
+    });
 
-    // Car Reservations
+    // Car Reservations - view only for employees, actions admin only
     Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
-    Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
-    Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
-    Route::delete('/cars/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
-    Route::post('/cars/{id}/approve', [CarController::class, 'approve'])->name('cars.approve');
+    Route::middleware('admin')->group(function () {
+        Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
+        Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
+        Route::delete('/cars/{id}', [CarController::class, 'destroy'])->name('cars.destroy');
+        Route::post('/cars/{id}/approve', [CarController::class, 'approve'])->name('cars.approve');
+    });
 
-    // Purchase Requests
+    // Purchase Requests - view only for employees
     Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchases.index');
-    Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchases.create');
-    Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchases.store');
-    Route::delete('/purchases/{id}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
-    Route::post('/purchases/{id}/approve', [PurchaseController::class, 'approve'])->name('purchases.approve');
-    Route::post('/purchases/{id}/reject', [PurchaseController::class, 'reject'])->name('purchases.reject');
+    Route::middleware('admin')->group(function () {
+        Route::get('/purchases/create', [PurchaseController::class, 'create'])->name('purchases.create');
+        Route::post('/purchases', [PurchaseController::class, 'store'])->name('purchases.store');
+        Route::delete('/purchases/{id}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
+        Route::post('/purchases/{id}/approve', [PurchaseController::class, 'approve'])->name('purchases.approve');
+        Route::post('/purchases/{id}/reject', [PurchaseController::class, 'reject'])->name('purchases.reject');
+    });
 
-    // Absences
+    // Absences - view only for employees
     Route::get('/absences', [AbsenceController::class, 'index'])->name('absences.index');
-    Route::get('/absences/create', [AbsenceController::class, 'create'])->name('absences.create');
-    Route::post('/absences', [AbsenceController::class, 'store'])->name('absences.store');
-    Route::delete('/absences/{id}', [AbsenceController::class, 'destroy'])->name('absences.destroy');
-    Route::post('/absences/{id}/approve', [AbsenceController::class, 'approve'])->name('absences.approve');
-    Route::post('/absences/{id}/reject', [AbsenceController::class, 'reject'])->name('absences.reject');
+    Route::middleware('admin')->group(function () {
+        Route::get('/absences/create', [AbsenceController::class, 'create'])->name('absences.create');
+        Route::post('/absences', [AbsenceController::class, 'store'])->name('absences.store');
+        Route::delete('/absences/{id}', [AbsenceController::class, 'destroy'])->name('absences.destroy');
+        Route::post('/absences/{id}/approve', [AbsenceController::class, 'approve'])->name('absences.approve');
+        Route::post('/absences/{id}/reject', [AbsenceController::class, 'reject'])->name('absences.reject');
+    });
 
     // Employees directory (all can view)
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
