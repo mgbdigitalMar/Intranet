@@ -35,19 +35,19 @@ class AppServiceProvider extends ServiceProvider
             });
         }
 
-        // Global stats cache (Redis safe)
-        if (extension_loaded('redis')) {
-            try {
-                \Cache::rememberForever('app_stats', function () {
-                    return [
-                        'total_users' => \App\Models\User::count(),
-                        'total_rooms' => \App\Models\CompanyRoom::count(),
-                        'total_cars' => \App\Models\CompanyCar::count(),
-                        'total_absences' => \App\Models\Absence::count(),
-                        'pending_purchases' => \App\Models\PurchaseRequest::where('status', 'pendiente')->count(),
-                    ];
-                });
-            } catch (\Exception $e) {}
-        }
+        // Global stats cache - disabled in boot to speed Railway build (use controllers)
+        // if (extension_loaded('redis')) {
+        //     try {
+        //         \Cache::rememberForever('app_stats', function () {
+        //             return [
+        //                 'total_users' => \App\Models\User::count(),
+        //                 'total_rooms' => \App\Models\CompanyRoom::count(),
+        //                 'total_cars' => \App\Models\CompanyCar::count(),
+        //                 'total_absences' => \App\Models\Absence::count(),
+        //                 'pending_purchases' => \App\Models\PurchaseRequest::where('status', 'pendiente')->count(),
+        //             ];
+        //         });
+        //     } catch (\Exception $e) {}
+        // }
     }
 }
