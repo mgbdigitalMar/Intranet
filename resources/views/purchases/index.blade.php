@@ -13,7 +13,6 @@
 </div>
 
 {{-- Catalog quick buttons --}}
-@if(session('user_role') === 'admin')
 <div class="card" style="margin-bottom:20px">
   <div class="card-title">🛒 Catálogo rápido</div>
   <div class="quick-catalog">
@@ -26,7 +25,6 @@
     @endforeach
   </div>
 </div>
-@endif
 
 {{-- All requests table --}}
 <h3 style="margin-bottom:16px;font-size:18px">📋 {{ session('user_role')==='admin'?'Todas las solicitudes':'Mis solicitudes' }}</h3>
