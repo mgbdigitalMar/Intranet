@@ -181,12 +181,6 @@ h2{font-size:28px;font-weight:800;margin-bottom:8px;letter-spacing:-.5px;
     </div>
     <button type="submit" class="btn">Entrar al portal →</button>
   </form>
-
-  <div class="demo-box">
-    <strong>👤 Admin:</strong> admin@empresa.com / admin123<br>
-    <strong>👤 Empleado:</strong> ana@empresa.com / emp123<br>
-    <strong>👤 Empleado:</strong> luis@empresa.com / emp123
-  </div>
 </div>
 
 <script>
