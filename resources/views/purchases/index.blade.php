@@ -9,9 +9,7 @@
 
 <div class="page-header">
   <div><h2>Solicitudes de Compra</h2><p>Solicita equipamiento para tu puesto de trabajo</p></div>
-  @if(session('user_role') === 'admin')
   <a href="{{ route('purchases.create') }}" class="btn btn-primary">+ Nueva solicitud</a>
-  @endif
 </div>
 
 {{-- Catalog quick buttons --}}

@@ -4,9 +4,7 @@
 
 <div class="page-header">
   <div><h2>Ausencias</h2><p>Notifica tus ausencias con antelación</p></div>
-  @if(session('user_role') === 'admin')
   <a href="{{ route('absences.create') }}" class="btn btn-primary">+ Notificar ausencia</a>
-  @endif
 </div>
 
 {{-- My absences --}}
