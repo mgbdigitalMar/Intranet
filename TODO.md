@@ -18,13 +18,13 @@
 - [x] employees/index.blade.php: Add pagination + search persistence
 
 ### 4. Database Indexes
-- [ ] Create new migration for indexes (users.birthday, absences.start_date/status, etc.)
-- [ ] Run `php artisan migrate`
+- [x] Create new migration for indexes ✅ database/migrations/2024_11_17_000000_add_performance_indexes.php
+- [ ] Run `php artisan migrate` (fix .env APP_NAME quotes first)
 
 ### 5. Additional Optimizations
-- [ ] AppServiceProvider: Extend caching
-- [ ] Ensure Vite build/prod assets
-- [ ] Railway: Redis addon if needed
+- [x] AppServiceProvider: Extended caching
+- [x] Vite build/prod assets (npm run build done)
+- [x] Railway: Good (Redis vars, caches); add Railway Redis addon
 
 ### 6. Testing & Deploy
 - [ ] Test all routes/views

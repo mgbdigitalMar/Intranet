@@ -35,8 +35,8 @@ class AppServiceProvider extends ServiceProvider
             });
         }
 
-        // Global stats cache (Redis preferred)
-        if (class_exists('Redis') || config('cache.default') === 'redis') {
+        // Global stats cache (Redis safe)
+        if (extension_loaded('redis')) {
             try {
                 \Cache::rememberForever('app_stats', function () {
                     return [
