@@ -4,42 +4,64 @@
 @push('css')
 <style>
 /* ── EMPLOYEE CARDS ── */
-.emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;}
 
 .emp-card{
   background:var(--surface);
   border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:20px;
+  border-radius:16px;
+  padding:24px;
   text-align:center;
-  transition:all .2s;
+  transition:all .25s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.emp-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--primary),var(--primary-light));
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .3s ease;
 }
 
 .emp-card:hover{
   border-color:var(--primary);
-  transform:translateY(-2px);
-  box-shadow:0 8px 24px rgba(79,121,247,.1);
+  transform:translateY(-4px);
+  box-shadow:0 12px 32px rgba(79,121,247,.15);
 }
 
-.emp-card .avatar{margin:0 auto 12px;}
-.emp-name{font-weight:700;font-size:15px;margin-bottom:2px;}
-.emp-role{font-size:12px;color:var(--text2);margin-bottom:10px;}
-.emp-bday{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--amber);background:var(--amber-dim);padding:4px 11px;border-radius:20px;margin-bottom:6px;}
-.emp-email{font-size:11.5px;color:var(--text3);margin-top:4px;}
+.emp-card:hover::before{
+  transform:scaleX(1);
+}
+
+.emp-card .avatar{margin:0 auto 14px;}
+.emp-name{font-weight:700;font-size:16px;margin-bottom:4px;}
+.emp-role{font-size:13px;color:var(--text2);margin-bottom:12px;}
+.emp-bday{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--amber);background:var(--amber-dim);padding:5px 12px;border-radius:20px;margin-bottom:8px;font-weight:600;}
+.emp-email{font-size:12px;color:var(--text3);margin-top:6px;}
 </style>
 @endpush
 
 @section('content')
 
 <div class="page-header">
-  <div><h2>Directorio de Empleados</h2><p>Todos los miembros del equipo</p></div>
+  <div>
+    <h2 class="section-title" style="margin-bottom:4px;">👥 Directorio de Empleados</h2>
+    <p class="section-subtitle">Todos los miembros del equipo</p>
+  </div>
   <div class="page-header-actions">
     <form action="{{ route('employees.index') }}" method="GET" style="display:flex;gap:8px;flex-wrap:wrap;width:100%">
       <div class="search-bar">
         <span>🔍</span>
         <input type="text" name="search" placeholder="Buscar por nombre, cargo..." value="{{ request('search') }}">
       </div>
-      <select name="department" class="form-control" style="width:auto;min-width:150px">
+      <select name="department" class="form-control" style="width:auto;min-width:180px">
         <option value="">Todos los departamentos</option>
         @foreach($departments as $dept)
           <option value="{{ $dept }}" {{ request('department')===$dept?'selected':'' }}>{{ $dept }}</option>

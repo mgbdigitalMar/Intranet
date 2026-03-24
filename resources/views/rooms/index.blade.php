@@ -1,18 +1,55 @@
 @extends('layouts.app')
 @section('title','Salas')
 
+@push('css')
+<style>
+  .room-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    text-align:center;
+    transition:all .25s ease;
+  }
+  .room-card:hover{
+    border-color:var(--border2);
+    transform:translateY(-3px);
+    box-shadow:var(--shadow);
+  }
+  .room-status{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+  }
+  .room-status.occupied{
+    background:var(--red-dim);
+    color:var(--red);
+  }
+  .room-status.available{
+    background:var(--green-dim);
+    color:var(--green);
+  }
+</style>
+@endpush
+
 @section('content')
 
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-    <div>
-        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Reservas de Salas</h2>
-        <p class="text-gray-600 dark:text-gray-400">Gestiona la disponibilidad de las salas de reuniones</p>
-    </div>
-    <a href="{{ route('rooms.create') }}" class="mt-4 sm:mt-0 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">+ Reservar sala</a>
+<div class="page-header">
+  <div>
+    <h2 class="section-title" style="margin-bottom:4px;">🚪 Reservas de Salas</h2>
+    <p class="section-subtitle">Gestiona la disponibilidad de las salas de reuniones</p>
+  </div>
+  <div class="page-header-actions">
+    <a href="{{ route('rooms.create') }}" class="btn btn-primary"><span>+</span> Reservar sala</a>
+  </div>
 </div>
 
 {{-- Room status cards --}}
-<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+<div class="four-col" style="margin-bottom:28px;">
     @foreach($rooms as $room)
     @php
         $roomTodayRes = $todayRes->where('room', $room->name);
@@ -26,56 +63,56 @@
             }
         }
     @endphp
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 text-center flex flex-col items-center">
-        <div class="text-4xl mb-2">🚪</div>
-        <h3 class="font-bold text-gray-800 dark:text-gray-200">{{ $room->name }}</h3>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Cap. {{ $room->capacity }} personas</p>
+    <div class="room-card">
+        <div style="font-size:32px;margin-bottom:12px;">🚪</div>
+        <h3 style="font-weight:700;font-size:16px;margin-bottom:4px;">{{ $room->name }}</h3>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:14px;">Cap. {{ $room->capacity }} personas</p>
         @if($isOccupied)
-        <span class="px-3 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full dark:bg-red-900/50 dark:text-red-300">🔴 Ocupada</span>
+        <span class="room-status occupied">🔴 Ocupada</span>
         @else
-        <span class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full dark:bg-green-900/50 dark:text-green-300">🟢 Libre ahora</span>
+        <span class="room-status available">🟢 Libre ahora</span>
         @endif
     </div>
     @endforeach
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+<div class="two-col">
     {{-- My reservations --}}
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">📋 Mis próximas reservas</h3>
+    <div class="card card-glow">
+        <div class="card-title"><span>📋</span> Mis próximas reservas</div>
         @if($myRes->isEmpty())
-        <div class="text-center text-gray-500 dark:text-gray-400 py-4"><p>No tienes reservas activas</p></div>
+        <div class="empty"><div class="e-icon">📅</div><p>No tienes reservas activas</p></div>
         @else
-        <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+        <div style="display:flex;flex-direction:column;gap:8px;">
             @foreach($myRes->take(5) as $r)
-            <li class="py-3 flex justify-between items-center">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px;background:var(--surface2);border-radius:12px;border:1px solid var(--border);">
                 <div>
-                    <p class="font-semibold text-gray-800 dark:text-gray-200">{{ $r->room }}</p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ $r->date->format('d/m/Y') }} · {{ $r->hour }} ({{ $r->duration }}h)</p>
+                    <div style="font-weight:700;font-size:14px;">{{ $r->room }}</div>
+                    <div style="font-size:12px;color:var(--text2);">{{ $r->date->format('d/m/Y') }} · {{ $r->hour }} ({{ $r->duration }}h)</div>
                 </div>
-                <div class="flex items-center gap-3">
+                <div style="display:flex;align-items:center;gap:10px;">
                     @include('partials.status', ['status' => $r->status])
                     <form action="{{ route('rooms.destroy', $r->id) }}" method="POST" onsubmit="return confirm('¿Cancelar esta reserva?')">
                         @csrf @method('DELETE')
-                        <button type="submit" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300" title="Cancelar">🗑️</button>
+                        <button type="submit" style="background:none;border:none;cursor:pointer;font-size:16px;opacity:.7;transition:opacity .2s;" title="Cancelar">🗑️</button>
                     </form>
                 </div>
-            </li>
+            </div>
             @endforeach
-        </ul>
+        </div>
         @endif
     </div>
 
     {{-- Quick info --}}
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">ℹ️ Información</h3>
-        <div class="text-sm text-gray-600 dark:text-gray-400 space-y-3">
-            <p>⏰ Disponible de <strong class="text-gray-800 dark:text-gray-200">08:00 a 20:00</strong></p>
-            <p>📅 Reservas desde hoy en adelante</p>
-            <p>⚡ Confirmación por el administrador</p>
+    <div class="card card-glow">
+        <div class="card-title"><span>ℹ️</span> Información</div>
+        <div style="font-size:14px;color:var(--text2);line-height:1.9;">
+            <p><strong>⏰</strong> Disponible de <span style="color:var(--text);font-weight:600;">08:00 a 20:00</span></p>
+            <p><strong>📅</strong> Reservas desde hoy en adelante</p>
+            <p><strong>⚡</strong> Confirmación por el administrador</p>
         </div>
-        <div class="mt-4 p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg text-sm text-gray-700 dark:text-gray-300">
-            💡 <strong class="font-semibold">Tip:</strong> Indica el motivo de la reunión para facilitar la aprobación.
+        <div style="margin-top:16px;padding:14px;background:var(--surface2);border-radius:12px;border:1px solid var(--border);font-size:13px;color:var(--text2);">
+            <strong style="color:var(--primary);">💡 Tip:</strong> Indica el motivo de la reunión para facilitar la aprobación.
         </div>
     </div>
 </div>

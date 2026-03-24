@@ -4,33 +4,46 @@
 @push('css')
 <style>
   .admin-banner {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 12px 16px;
-    border-radius: var(--radius);
+    background: linear-gradient(135deg, rgba(247,168,79,.15) 0%, rgba(247,168,79,.05) 100%);
+    border: 1px solid rgba(247,168,79,.2);
+    padding: 16px 20px;
+    border-radius: 14px;
     font-weight: 600;
-    margin-bottom: 20px;
-    color: var(--text);
+    margin-bottom: 24px;
+    color: var(--amber);
+    display:flex;
+    align-items:center;
+    gap:12px;
   }
-  .page-header-actions {
-    flex-wrap: wrap;
-    gap: 12px
+  .admin-banner-icon{
+    width:40px;
+    height:40px;
+    background:var(--amber-dim);
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
   }
 </style>
 @endpush
 
 @section('content')
 
-<div class="admin-banner">
-  ⭐ Panel de administración — Tienes acceso completo a toda la gestión del portal.
-</div>
-
-<div class="page-header">
-  <div><h2>⚙️ Panel de Administración</h2><p>Gestión completa del portal corporativo</p></div>
-  <div class="page-header-actions" style="flex-wrap: wrap; gap: 12px;">
-    <a href="{{ route('admin.rooms-config') }}" class="btn btn-ghost">🚪 Gestionar Salas</a>
-    <a href="{{ route('admin.cars-config') }}" class="btn btn-ghost">🚗 Gestionar Vehículos</a>
-    <a href="{{ route('employees.create') }}" class="btn btn-primary">+ Añadir empleado</a>
+<div class="hero-section" style="padding:28px;">
+  <div class="hero-content">
+    <div class="admin-banner" style="margin-bottom:0;background:transparent;border:none;padding:0;">
+      <div class="admin-banner-icon">⚙️</div>
+      <div>
+        <div style="font-size:18px;font-weight:800;font-family:'Syne',sans-serif;color:var(--text);">Panel de Administración</div>
+        <div style="font-size:13px;color:var(--text2);font-weight:500;">Tienes acceso completo a toda la gestión del portal</div>
+      </div>
+    </div>
+    <div class="hero-actions" style="margin-top:20px;">
+      <a href="{{ route('admin.rooms-config') }}" class="btn btn-ghost"><span>🚪</span> Gestionar Salas</a>
+      <a href="{{ route('admin.cars-config') }}" class="btn btn-ghost"><span>🚗</span> Gestionar Vehículos</a>
+      <a href="{{ route('employees.create') }}" class="btn btn-primary"><span>+</span> Añadir empleado</a>
+    </div>
   </div>
 </div>
 

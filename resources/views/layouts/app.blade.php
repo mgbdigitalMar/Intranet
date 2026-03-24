@@ -95,7 +95,9 @@
     </div>
     <div class="topbar-right">
       <span class="date-chip">{{ now()->format('d/m/Y') }}</span>
-      <button id="themeToggle" class="btn btn-ghost btn-icon" title="Cambiar tema">☀️</button>
+      <button id="themeToggle" class="theme-toggle-btn" title="Cambiar tema">
+        <span class="theme-icon">☀️</span>
+      </button>
       <div class="avatar sidebar-toggle" id="sidebarToggle" style="cursor:pointer" title="{{ session('user_name') }} - Click para menú">{{ strtoupper(substr(session('user_name','?'),0,2)) }}</div>
     </div>
   </div>

@@ -12,6 +12,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AdminController;
 
 // Auth routes
+Route::view('/landing', 'landing')->name('landing');
 Route::get('/', fn() => redirect('/login'));
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
