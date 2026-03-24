@@ -1,13 +1,31 @@
 @extends('layouts.app')
 @section('title','Añadir Empleado')
+
+@push('css')
+<style>
+.form-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:32px;
+  max-width:680px;
+}
+</style>
+@endpush
+
 @section('content')
 
 <div class="page-header">
-  <div><h2>Añadir empleado</h2><p>Crea una nueva cuenta para un miembro del equipo</p></div>
-  <a href="{{ route('employees.index') }}" class="btn btn-ghost">← Volver</a>
+  <div>
+    <h2 class="section-title" style="margin-bottom:4px;">👥 Añadir empleado</h2>
+    <p class="section-subtitle">Crea una nueva cuenta para un miembro del equipo</p>
+  </div>
+  <div class="page-header-actions">
+    <a href="{{ route('employees.index') }}" class="btn btn-ghost">← Volver</a>
+  </div>
 </div>
 
-<div class="card" style="max-width:680px">
+<div class="form-card">
   <form action="{{ route('employees.store') }}" method="POST">
     @csrf
 
