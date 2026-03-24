@@ -16,7 +16,6 @@
 <div class="card" style="margin-bottom:20px">
   <div class="card-title">🛒 Catálogo rápido</div>
   <div class="quick-catalog">
-    <div class="quick-catalog-inner">
       @foreach([['💻','Portátil'],['🖥️','Monitor'],['⌨️','Teclado'],['🖱️','Ratón'],['🖨️','Impresora'],['📱','Móvil'],['🎧','Auriculares'],['💺','Silla ergo.']] as [$icon,$name])
       <a href="{{ route('purchases.create') }}?item={{ urlencode("$icon $name") }}"
          class="quick-catalog-item">
@@ -24,7 +23,6 @@
          <div class="qc-name">{{ $name }}</div>
       </a>
       @endforeach
-    </div>
   </div>
 </div>
 

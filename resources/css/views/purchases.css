@@ -12,12 +12,13 @@
   background: var(--border2);
   border-radius: 2px;
 }
-.quick-catalog-inner {
-  display: flex;
-  gap: 14px;
-  padding: 4px 8px;
-  min-width: max-content;
+.quick-catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+  padding: 12px;
 }
+
 
 .quick-catalog-item {
   flex-shrink: 0;
