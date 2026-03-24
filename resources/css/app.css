@@ -3,59 +3,94 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root{
-  /* Core Colors */
-  --bg:#0d1117;
-  --surface:#161b27;
-  --surface2:#1e2638;
-  --surface3:#242d42;
-  --border:#2a3450;
-  --border2:#3a4870;
+  /* Core Colors - Dark Mode */
+  --bg:#0a0a0f;
+  --surface:#12121a;
+  --surface2:#181824;
+  --surface3:#1e1e2e;
+  --border:#2a2a3d;
+  --border2:#3d3d5c;
   
   /* Text Colors */
-  --text:#e8ecf5;
-  --text2:#8b97b8;
-  --text3:#5a6885;
+  --text:#f0f0f5;
+  --text2:#a0a0b8;
+  --text3:#606080;
   
-  /* Accent Colors */
-  --primary:#4f79f7;
-  --primary-light:#6b8ff9;
-  --primary-dim:rgba(79,121,247,.12);
-  --amber:#f7a84f;
-  --amber-dim:rgba(247,168,79,.12);
-  --green:#4fca8a;
-  --green-dim:rgba(79,202,138,.12);
-  --red:#f74f6e;
-  --red-dim:rgba(247,79,110,.12);
-  --purple:#9b6ff7;
-  --purple-dim:rgba(155,111,247,.12);
-  --cyan:#4fc8f7;
-  --cyan-dim:rgba(79,200,247,.12);
+  /* Accent Colors - Rich Palette */
+  --primary:#6366f1;
+  --primary-light:#818cf8;
+  --primary-dark:#4f46e5;
+  --primary-dim:rgba(99,102,241,.15);
+  
+  --secondary:#ec4899;
+  --secondary-light:#f472b6;
+  --secondary-dim:rgba(236,72,153,.15);
+  
+  --amber:#f59e0b;
+  --amber-light:#fbbf24;
+  --amber-dark:#d97706;
+  --amber-dim:rgba(245,158,11,.15);
+  
+  --green:#10b981;
+  --green-light:#34d399;
+  --green-dark:#059669;
+  --green-dim:rgba(16,185,129,.15);
+  
+  --red:#ef4444;
+  --red-light:#f87171;
+  --red-dark:#dc2626;
+  --red-dim:rgba(239,68,68,.15);
+  
+  --purple:#8b5cf6;
+  --purple-light:#a78bfa;
+  --purple-dark:#7c3aed;
+  --purple-dim:rgba(139,92,246,.15);
+  
+  --cyan:#06b6d4;
+  --cyan-light:#22d3ee;
+  --cyan-dark:#0891b2;
+  --cyan-dim:rgba(6,182,212,.15);
+  
+  --orange:#f97316;
+  --orange-dim:rgba(249,115,22,.15);
+  
+  --pink:#ec4899;
+  --pink-dim:rgba(236,72,153,.15);
   
   /* Layout */
   --sidebar-w:248px;
-  --radius:12px;
-  --radius-sm:8px;
+  --radius:14px;
+  --radius-sm:10px;
+  --radius-lg:20px;
   --shadow:0 4px 24px rgba(0,0,0,.4);
   --shadow-lg:0 8px 32px rgba(0,0,0,.5);
+  --shadow-glow:0 0 40px rgba(99,102,241,.15);
 }
 
 [data-theme="light"] {
-  --bg: #f3f4f6;
+  --bg: #f8fafc;
   --surface: #ffffff;
-  --surface2: #f9fafb;
-  --surface3: #f3f4f6;
-  --border: #e5e7eb;
-  --border2: #d1d5db;
-  --text: #111827;
-  --text2: #4b5563;
-  --text3: #6b7280;
-  --amber: #d97706; --amber-dim: rgba(217,119,6,.12);
-  --green: #059669; --green-dim: rgba(5,150,105,.12);
-  --red: #dc2626; --red-dim: rgba(220,38,38,.12);
-  --purple: #7c3aed; --purple-dim: rgba(124,58,237,.12);
-  --cyan: #0284c7; --cyan-dim: rgba(2,132,199,.12);
+  --surface2: #f1f5f9;
+  --surface3: #e2e8f0;
+  --border: #e2e8f0;
+  --border2: #cbd5e1;
+  --text: #0f172a;
+  --text2: #475569;
+  --text3: #94a3b8;
+  
+  --primary: #6366f1; --primary-light: #818cf8; --primary-dark: #4f46e5; --primary-dim: rgba(99,102,241,.12);
+  --secondary: #ec4899; --secondary-light: #f472b6; --secondary-dim: rgba(236,72,153,.12);
+  --amber: #f59e0b; --amber-light: #fbbf24; --amber-dark: #d97706; --amber-dim: rgba(245,158,11,.12);
+  --green: #10b981; --green-light: #34d399; --green-dark: #059669; --green-dim: rgba(16,185,129,.12);
+  --red: #ef4444; --red-light: #f87171; --red-dark: #dc2626; --red-dim: rgba(239,68,68,.12);
+  --purple: #8b5cf6; --purple-light: #a78bfa; --purple-dark: #7c3aed; --purple-dim: rgba(139,92,246,.12);
+  --cyan: #06b6d4; --cyan-light: #22d3ee; --cyan-dark: #0891b2; --cyan-dim: rgba(6,182,212,.12);
+  --orange: #f97316; --orange-dim: rgba(249,115,22,.12);
+  --pink: #ec4899; --pink-dim: rgba(236,72,153,.12);
+  
   --shadow: 0 4px 20px rgba(0,0,0,.06);
   --shadow-lg: 0 8px 32px rgba(0,0,0,.1);
+  --shadow-glow: 0 0 40px rgba(99,102,241,.1);
 }
 
 /* ── RESET & BASE ── */
@@ -423,6 +458,8 @@ img{max-width:100%;height:auto;}
 .stat-card.purple::after{background:var(--purple);}
 .stat-card.cyan::after{background:var(--cyan);}
 .stat-card.red::after{background:var(--red);}
+.stat-card.orange::after{background:var(--orange);}
+.stat-card.pink::after{background:var(--pink);}
 
 .stat-icon{font-size:22px;margin-bottom:10px;}
 .stat-val{font-size:30px;font-weight:800;font-family:'Syne',sans-serif;line-height:1.1;}
@@ -525,6 +562,8 @@ td strong{color:var(--text);}
 .tag-red{background:var(--red-dim);color:var(--red);}
 .tag-purple{background:var(--purple-dim);color:var(--purple);}
 .tag-cyan{background:var(--cyan-dim);color:var(--cyan);}
+.tag-orange{background:var(--orange-dim);color:var(--orange);}
+.tag-pink{background:var(--pink-dim);color:var(--pink);}
 .tag-grey{background:var(--surface2);color:var(--text2);}
 
 /* ── BUTTONS ── */

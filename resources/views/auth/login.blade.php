@@ -8,15 +8,37 @@
 @vite(['resources/css/app.css'])
 <style>
 html,body{overflow-x:hidden;max-width:100vw;}
-:root{--bg:#0d1117;--surface:#161b27;--surface2:#1e2638;--border:#2a3450;
-  --text:#e8ecf5;--text2:#8b97b8;--primary:#4f79f7;--primary-light:#6b8ff9;
-  --primary-dim:rgba(79,121,247,.12);--red:#f74f6e;--red-dim:rgba(247,79,110,.12);
-  --green:#4fca8a;--green-dim:rgba(79,202,138,.12);}
+:root{
+  --bg:#0a0a0f;
+  --surface:#12121a;
+  --surface2:#181824;
+  --border:#2a2a3d;
+  --text:#f0f0f5;
+  --text2:#a0a0b8;
+  --text3:#606080;
+  --primary:#6366f1;
+  --primary-light:#818cf8;
+  --primary-dim:rgba(99,102,241,.15);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,.15);
+  --green:#10b981;
+  --green-dim:rgba(16,185,129,.15);
+}
 [data-theme="light"]{
-  --bg:#f8fafc;--surface:#ffffff;--surface2:#f1f5f9;--border:#e2e8f0;
-  --text:#0f172a;--text2:#475569;--primary:#4f79f7;--primary-light:#6b8ff9;
-  --primary-dim:rgba(79,121,247,.12);--red:#ef4444;--red-dim:rgba(239,68,68,.12);
-  --green:#10b981;--green-dim:rgba(16,185,129,.12);
+  --bg:#f8fafc;
+  --surface:#ffffff;
+  --surface2:#f1f5f9;
+  --border:#e2e8f0;
+  --text:#0f172a;
+  --text2:#475569;
+  --text3:#94a3b8;
+  --primary:#6366f1;
+  --primary-light:#818cf8;
+  --primary-dim:rgba(99,102,241,.12);
+  --red:#ef4444;
+  --red-dim:rgba(239,68,68,.12);
+  --green:#10b981;
+  --green-dim:rgba(16,185,129,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);
