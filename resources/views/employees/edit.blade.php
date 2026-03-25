@@ -87,19 +87,12 @@
         @endif
       </div>
       <div class="form-group" style="position:relative;">
-        <label>Nueva contraseña <span style="color:var(--text3)">dejar vacío para no cambiar</span></label>
+        <label>Contraseña actual / nueva <span style="color:var(--text3)">ver actual, introduce nueva para cambiar</span></label>
         <div style="display:flex; gap:8px; align-items:end;">
-          <input type="password" name="password" id="edit-password" class="form-control" placeholder="Nueva contraseña..." style="flex:1;">
+          <input type="password" name="password" id="edit-password" class="form-control" value="emp123" placeholder="emp123 (actual) / nueva..." style="flex:1;">
           <button type="button" class="toggle-password" onclick="togglePassword('edit-password')" style="border:none; background:none; cursor:pointer; padding:8px 12px; color:var(--text2); font-size:16px;">👁</button>
         </div>
-      </div>
-      <div class="form-group" style="position:relative;">
-        <label>Contraseña actual <span style="color:var(--text3)">solo visualización</span></label>
-        <div style="display:flex; gap:8px; align-items:end;">
-          <input type="password" id="current-password" class="form-control" value="emp123" readonly style="flex:1; background:var(--surface2);">
-          <button type="button" class="toggle-password" onclick="togglePassword('current-password')" style="border:none; background:none; cursor:pointer; padding:8px 12px; color:var(--text2); font-size:16px;">👁</button>
-        </div>
-        <div class="form-hint">Contraseña temporal mostrada por seguridad. El empleado conoce su clave de acceso.</div>
+        <div class="form-hint">Deja vacía para mantener actual. El valor por defecto es <strong>emp123</strong></div>
       </div>
     </div>
 
