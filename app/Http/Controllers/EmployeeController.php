@@ -36,7 +36,7 @@ private array $departments = ['IT','Marketing','RRHH','Ventas','Finanzas','Opera
     {
         $request->validate([
             'name'       => 'required|max:255',
-            'email'      => 'required|email|unique:users,email',
+'email'      => 'required|string|email:rfc|lowercase|unique:users,email|max:255',
             'department' => 'required',
             'position'   => 'required|max:255',
             'birthday'   => 'nullable|date',
@@ -75,7 +75,7 @@ private array $departments = ['IT','Marketing','RRHH','Ventas','Finanzas','Opera
         $employee = User::findOrFail($id);
         $request->validate([
             'name'       => 'required|max:255',
-            'email'      => "required|email|unique:users,email,{$id}",
+'email'      => "required|string|email:rfc|lowercase|unique:users,email,{$id}|max:255",
             'department' => 'required',
             'position'   => 'required|max:255',
             'birthday'   => 'nullable|date',
