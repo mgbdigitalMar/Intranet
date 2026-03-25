@@ -93,6 +93,14 @@
           <button type="button" class="toggle-password" onclick="togglePassword('edit-password')" style="border:none; background:none; cursor:pointer; padding:8px 12px; color:var(--text2); font-size:16px;">👁</button>
         </div>
       </div>
+      <div class="form-group" style="position:relative;">
+        <label>Contraseña actual <span style="color:var(--text3)">solo visualización</span></label>
+        <div style="display:flex; gap:8px; align-items:end;">
+          <input type="password" id="current-password" class="form-control" value="emp123" readonly style="flex:1; background:var(--surface2);">
+          <button type="button" class="toggle-password" onclick="togglePassword('current-password')" style="border:none; background:none; cursor:pointer; padding:8px 12px; color:var(--text2); font-size:16px;">👁</button>
+        </div>
+        <div class="form-hint">Contraseña temporal mostrada por seguridad. El empleado conoce su clave de acceso.</div>
+      </div>
     </div>
 
     <script>
