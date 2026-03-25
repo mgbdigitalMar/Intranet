@@ -7,7 +7,7 @@ use App\Models\User;
 
 class EmployeeController extends Controller
 {
-    private array $departments = ['IT','Marketing','RRHH','Ventas','Finanzas','Operaciones','Dirección','Logística','Atención al cliente'];
+private array $departments = ['IT','Marketing','RRHH','Ventas','Finanzas','Operaciones','Dirección','Logística','Atención al cliente', 'Administración', 'Planificación', 'Comunicación', 'Formación', 'Técnico', 'Verificación (CAE)'];
 
     public function index(Request $request)
     {
