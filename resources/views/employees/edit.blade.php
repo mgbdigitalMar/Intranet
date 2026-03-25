@@ -95,6 +95,20 @@
       </div>
     </div>
 
+    <script>
+function togglePassword(id) {
+  const input = document.getElementById(id);
+  const toggle = input.nextElementSibling;
+  if (input.type === 'password') {
+    input.type = 'text';
+    toggle.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    toggle.textContent = '👁';
+  }
+}
+    </script>
+    
     <div style="display:flex;gap:10px;margin-top:6px">
       <button type="submit" class="btn btn-primary">Guardar cambios</button>
       <a href="{{ route('employees.index') }}" class="btn btn-ghost">Cancelar</a>
