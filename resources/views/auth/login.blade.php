@@ -175,10 +175,26 @@ h2{font-size:28px;font-weight:800;margin-bottom:8px;letter-spacing:-.5px;
       <input type="email" name="email" class="form-control" placeholder="tu@empresa.com"
         value="{{ old('email') }}" required autofocus>
     </div>
-    <div class="form-group">
+    <div class="form-group" style="position:relative;">
       <label>Contraseña</label>
-      <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+      <div style="display:flex; gap:8px; align-items:end;">
+        <input type="password" name="password" id="login-password" class="form-control" placeholder="••••••••" required style="flex:1;">
+        <button type="button" class="toggle-password" onclick="togglePassword('login-password')" style="border:none; background:none; cursor:pointer; padding:8px 12px; color:var(--text2); font-size:16px;">👁</button>
+      </div>
     </div>
+    <script>
+function togglePassword(id) {
+  const input = document.getElementById(id);
+  const toggle = input.nextElementSibling;
+  if (input.type === 'password') {
+    input.type = 'text';
+    toggle.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    toggle.textContent = '👁';
+  }
+}
+    </script>
     <button type="submit" class="btn">Entrar al portal →</button>
   </form>
 </div>
