@@ -10,6 +10,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\AbsenceController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PasswordChangeController;
 
 // Auth routes
 Route::view('/landing', 'landing')->name('landing');
@@ -19,7 +20,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected routes (require login)
-Route::middleware('auth.custom')->group(function () {&#10;    Route::get('/password-change', [\App\Http\Controllers\PasswordChangeController::class, 'showChange'])->name('password.change');&#10;    Route::post('/password-change', [\App\Http\Controllers\PasswordChangeController::class, 'update'])->name('password.change.update');&#10;&#10;
+Route::middleware('auth.custom')->group(function () {
+    Route::get('/password-change', [PasswordChangeController::class, 'showChange'])->name('password.change');
+    Route::post('/password-change', [PasswordChangeController::class, 'update'])->name('password.change.update');
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
