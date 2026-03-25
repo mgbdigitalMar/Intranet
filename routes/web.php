@@ -19,7 +19,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected routes (require login)
-Route::middleware('auth.custom')->group(function () {
+Route::middleware('auth.custom')->group(function () {&#10;    Route::get('/password-change', [\App\Http\Controllers\PasswordChangeController::class, 'showChange'])->name('password.change');&#10;    Route::post('/password-change', [\App\Http\Controllers\PasswordChangeController::class, 'update'])->name('password.change.update');&#10;&#10;
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

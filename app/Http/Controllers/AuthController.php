@@ -36,6 +36,10 @@ class AuthController extends Controller
             'user_role' => $user->role,
         ]);
 
+        if ($user->must_change_password) {
+            return redirect('/password-change');
+        }
+
         return redirect('/dashboard');
     }
 
@@ -45,3 +49,4 @@ class AuthController extends Controller
         return redirect('/login')->with('success', 'Has cerrado sesión correctamente.');
     }
 }
+

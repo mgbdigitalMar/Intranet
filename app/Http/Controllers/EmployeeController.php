@@ -58,6 +58,7 @@ private array $departments = ['IT','Marketing','RRHH','Ventas','Finanzas','Opera
             'position'   => $request->position,
             'phone'      => $request->phone,
             'birthday'   => $request->birthday,
+            'must_change_password' => true,
         ]);
 
         return redirect()->route('employees.index')->with('success', "Empleado {$request->name} añadido correctamente. Contraseña inicial: emp123");
@@ -118,3 +119,4 @@ private array $departments = ['IT','Marketing','RRHH','Ventas','Finanzas','Opera
         return redirect()->back()->with('success', 'Rol actualizado.');
     }
 }
+
