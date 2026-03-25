@@ -84,9 +84,12 @@
           <option value="admin"    {{ old('role')==='admin'?'selected':'' }}>⭐ Administrador</option>
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group" style="position:relative;">
         <label>Contraseña inicial</label>
-        <input type="text" name="password" class="form-control" value="emp123" placeholder="emp123">
+        <div style="display:flex; gap:8px; align-items:end;">
+          <input type="password" name="password" id="create-password" class="form-control" value="emp123" placeholder="emp123" style="flex:1;">
+          <button type="button" class="toggle-password" onclick="togglePassword('create-password')" style="border:none; background:none; cursor:pointer; padding:8px 12px; color:var(--text2); font-size:16px;">👁</button>
+        </div>
         <div class="form-hint">Si la dejas vacía, se usará <strong>emp123</strong></div>
       </div>
     </div>
@@ -96,6 +99,20 @@
       ✅ El empleado podrá acceder inmediatamente con su correo y la contraseña asignada.
     </div>
 
+    <script>
+function togglePassword(id) {
+  const input = document.getElementById(id);
+  const toggle = input.nextElementSibling;
+  if (input.type === 'password') {
+    input.type = 'text';
+    toggle.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    toggle.textContent = '👁';
+  }
+}
+    </script>
+    
     <div style="display:flex;gap:10px">
       <button type="submit" class="btn btn-primary">Crear empleado</button>
       <a href="{{ route('employees.index') }}" class="btn btn-ghost">Cancelar</a>

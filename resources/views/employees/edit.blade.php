@@ -86,9 +86,12 @@
           <input type="hidden" name="role" value="{{ $employee->role }}">
         @endif
       </div>
-      <div class="form-group">
+      <div class="form-group" style="position:relative;">
         <label>Nueva contraseña <span style="color:var(--text3)">dejar vacío para no cambiar</span></label>
-        <input type="text" name="password" class="form-control" placeholder="Nueva contraseña...">
+        <div style="display:flex; gap:8px; align-items:end;">
+          <input type="password" name="password" id="edit-password" class="form-control" placeholder="Nueva contraseña..." style="flex:1;">
+          <button type="button" class="toggle-password" onclick="togglePassword('edit-password')" style="border:none; background:none; cursor:pointer; padding:8px 12px; color:var(--text2); font-size:16px;">👁</button>
+        </div>
       </div>
     </div>
 
