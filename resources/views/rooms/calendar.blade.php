@@ -15,7 +15,7 @@
 <div class="page-header">
   <div>
     <h2 class="section-title">📅 Calendario de Salas</h2>
-    <p class="section-subtitle">Visualiza ocupación de salas por fecha (rojo=confirmado, naranja=pendiente)</p>
+<p class="section-subtitle">Calendario con estado diario: Verde (libre), Rojo (todo ocupado). Círculos indican número disponible.</p>
   </div>
   <div class="page-header-actions">
     <a href="{{ route('rooms.index') }}" class="btn btn-ghost">← Lista</a>
@@ -39,10 +39,12 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     events: @json($events),
     eventDidMount: function(info) {
-      if (info.event.extendedProps.status === 'confirmada') {
-        info.el.classList.add('occupied');
-      } else if (info.event.extendedProps.status === 'pendiente') {
-        info.el.classList.add('requested');
+      const free = info.event.extendedProps.free || 0;
+      if (free === 0) {
+        info.el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;color:white;">●●●</div>';
+      } else {
+        const dots = '●'.repeat(free);
+        info.el.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:bold;color:white;">' + dots + '</div>';
       }
     },
     height: 'auto'

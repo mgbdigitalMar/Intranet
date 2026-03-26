@@ -72,21 +72,31 @@ return view('cars.index', compact('cars','allRes','myRes','today', 'from', 'to')
 
     public function calendar()
     {
-        $reservations = CarReservation::with('user')
-            ->whereIn('status', ['pendiente', 'confirmada'])
-            ->get()
-            ->map(function ($res) {
-                $end = \Carbon\Carbon::parse($res->date);
-                return [
-                    'title' => $res->car . ' - ' . $res->user->name . ' (' . $res->hour . ')',
-                    'start' => $res->date,
-                    'end' => $end->copy()->addDay(),
-                    'status' => $res->status,
-                    'url' => route('cars.index')
-                ];
-            });
+        $today = now()->format('Y-m-d');
+        $totalCars = CompanyCar::count();
+        $occupiedDates = CarReservation::whereIn('status', ['pendiente', 'confirmada'])
+            ->where('date', '>=', $today)
+            ->groupBy('date')
+            ->selectRaw('date, count(*) as occupied')
+            ->pluck('occupied', 'date');
+        
+        $events = [];
+        $date = \Carbon\Carbon::parse($today);
+        while ($date->lte($date->copy()->addMonth())) {
+            $key = $date->format('Y-m-d');
+            $occ = $occupiedDates->get($key, 0);
+            $free = $totalCars - $occ;
+            $color = $free >= 1 ? '#10b981' : '#ef4444'; // green if >=1 free, red if 0
+            $title = "Libres: $free / $totalCars";
+            $events[] = [
+                'title' => $title,
+                'start' => $key,
+                'color' => $color,
+                'extendedProps' => ['free' => $free]
+            ];
+            $date->addDay();
+        }
 
-        $events = $reservations->toArray();
-        return view('cars.calendar', compact('events'));
+        return view('cars.calendar', compact('events', 'totalCars'));
     }
 }

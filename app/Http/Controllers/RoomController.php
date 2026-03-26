@@ -74,21 +74,31 @@ return view('rooms.index', compact('rooms','allRes','myRes','todayRes', 'from', 
 
     public function calendar()
     {
-        $reservations = RoomReservation::with('user')
-            ->whereIn('status', ['pendiente', 'confirmada'])
-            ->get()
-            ->map(function ($res) {
-                $end = \Carbon\Carbon::parse($res->date);
-                return [
-                    'title' => $res->room . ' - ' . $res->user->name . ' (' . $res->hour . ' ' . $res->duration . 'h)',
-                    'start' => $res->date,
-                    'end' => $end->copy()->addDay(),
-                    'status' => $res->status,
-                    'url' => route('rooms.index')
-                ];
-            });
+        $today = now()->format('Y-m-d');
+        $totalRooms = CompanyRoom::count();
+        $occupiedDates = RoomReservation::whereIn('status', ['pendiente', 'confirmada'])
+            ->where('date', '>=', $today)
+            ->groupBy('date')
+            ->selectRaw('date, count(*) as occupied')
+            ->pluck('occupied', 'date');
+        
+        $events = [];
+        $date = \Carbon\Carbon::parse($today);
+        while ($date->lte($date->copy()->addMonth())) {
+            $key = $date->format('Y-m-d');
+            $occ = $occupiedDates->get($key, 0);
+            $free = $totalRooms - $occ;
+            $color = $free >= 1 ? '#10b981' : '#ef4444';
+            $title = "Libres: $free / $totalRooms ●";
+            $events[] = [
+                'title' => $title,
+                'start' => $key,
+                'color' => $color,
+                'extendedProps' => ['free' => $free]
+            ];
+            $date->addDay();
+        }
 
-        $events = $reservations->toArray();
-        return view('rooms.calendar', compact('events'));
+        return view('rooms.calendar', compact('events', 'totalRooms'));
     }
 }
