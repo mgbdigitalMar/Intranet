@@ -13,10 +13,16 @@ class RoomController extends Controller
     {
         $today        = now()->toDateString();
         $rooms        = \Cache::remember('rooms_all', 3600, fn() => CompanyRoom::all());
-        $allRes       = RoomReservation::with('user')->orderBy('date','desc')->orderBy('hour')->limit(50)->get();
+$from = request()->get('from') ? request()->get('from') : null;
+$to = request()->get('to') ? request()->get('to') : null;
+$allRes = RoomReservation::with('user');
+if ($from && $to) {
+    $allRes = $allRes->whereBetween('date', [$from, $to]);
+}
+$allRes = $allRes->orderBy('date','desc')->orderBy('hour')->limit(50)->get();
         $myRes        = RoomReservation::with('user')->where('user_id', session('user_id'))->orderBy('date','desc')->get();
         $todayRes     = RoomReservation::where('date', $today)->get();
-        return view('rooms.index', compact('rooms','allRes','myRes','todayRes'));
+return view('rooms.index', compact('rooms','allRes','myRes','todayRes', 'from', 'to'));
     }
 
     public function create()

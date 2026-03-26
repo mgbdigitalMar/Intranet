@@ -13,9 +13,15 @@ class CarController extends Controller
     {
         $today  = now()->toDateString();
         $cars   = \Cache::remember('cars_all', 3600, fn() => CompanyCar::all());
-        $allRes = CarReservation::with('user')->latest('date')->limit(50)->get();
+$from = request()->get('from') ? request()->get('from') : null;
+$to = request()->get('to') ? request()->get('to') : null;
+$allRes = CarReservation::with('user');
+if ($from && $to) {
+    $allRes = $allRes->whereBetween('date', [$from, $to]);
+}
+$allRes = $allRes->latest('date')->limit(50)->get();
         $myRes  = CarReservation::with('user')->where('user_id', session('user_id'))->latest('date')->get();
-        return view('cars.index', compact('cars','allRes','myRes','today'));
+return view('cars.index', compact('cars','allRes','myRes','today', 'from', 'to'));
     }
 
     public function create()

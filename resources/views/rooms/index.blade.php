@@ -117,6 +117,27 @@
     </div>
 </div>
 
+<div style="background:var(--surface);padding:20px;border-radius:12px;border:1px solid var(--border);margin:24px 0;">
+    <form method="GET" style="display:flex;flex-wrap:wrap;gap:12px;align-items:end;max-width:400px;">
+        <div>
+            <label style="display:block;font-weight:500;margin-bottom:4px;color:var(--text);">Desde</label>
+            <input type="date" name="from" value="{{ $from }}" class="form-control" style="width:140px;">
+        </div>
+        <div>
+            <label style="display:block;font-weight:500;margin-bottom:4px;color:var(--text);">Hasta</label>
+            <input type="date" name="to" value="{{ $to }}" class="form-control" style="width:140px;">
+        </div>
+        <button type="submit" class="btn btn-primary" style="white-space:nowrap;">🔍 Filtrar</button>
+        <a href="{{ route('rooms.index') }}" class="btn btn-ghost">Limpiar</a>
+    </form>
+    @if($from && $to)
+        <p style="margin-top:12px;font-size:14px;color:var(--text);">
+            Mostrando reservas del {{ \Carbon\Carbon::parse($from)->format('d/m/Y') }} al {{ \Carbon\Carbon::parse($to)->format('d/m/Y') }}
+            ({{ $allRes->count() }} resultados)
+        </p>
+    @endif
+</div>
+
 {{-- All reservations --}}
 <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">📅 Todas las reservas</h3>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
