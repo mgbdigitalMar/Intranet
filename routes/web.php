@@ -32,6 +32,7 @@ Route::middleware('auth.custom')->group(function () {
 
     // Room Reservations - view only for employees, actions admin only
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+    Route::get('/rooms/calendar', [RoomController::class, 'calendar'])->name('rooms.calendar');
     Route::get('/rooms/create', [RoomController::class, 'create'])->name('rooms.create');
     Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::middleware('admin')->group(function () {
@@ -41,6 +42,7 @@ Route::middleware('auth.custom')->group(function () {
 
     // Car Reservations - view only for employees, actions admin only
     Route::get('/cars', [CarController::class, 'index'])->name('cars.index');
+    Route::get('/cars/calendar', [CarController::class, 'calendar'])->name('cars.calendar');
     Route::get('/cars/create', [CarController::class, 'create'])->name('cars.create');
     Route::post('/cars', [CarController::class, 'store'])->name('cars.store');
     Route::middleware('admin')->group(function () {

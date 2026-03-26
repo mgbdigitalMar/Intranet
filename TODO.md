@@ -11,10 +11,10 @@
 # TODO: Enhanced calendar view for cars/rooms occupancy (red/green dates on calendar when creating reservations)
 
 ## New Plan Steps:
-- [ ] 1. Create new views: resources/views/cars/calendar.blade.php & rooms/calendar.blade.php with FullCalendar JS showing reservations (green=available, red=occupied/requested).
-- [ ] 2. Add controllers methods: CarController@calendar & RoomController@calendar fetching confirmed/pending reservations as events.
-- [ ] 3. Add links/buttons in index.blade.php to "Ver calendario".
-- [ ] 4. Include FullCalendar CDN/CSS/JS in layouts/app.blade.php or per-view.
-- [ ] 5. Test calendar rendering and color coding.
+- [x] 1. Create new views: resources/views/cars/calendar.blade.php & rooms/calendar.blade.php with FullCalendar JS showing reservations (rojo=confirmado, naranja=pendiente).
+- [x] 2. Add controllers methods: CarController@calendar & RoomController@calendar fetching confirmed/pending reservations as events.
+- [x] 3. Add links/buttons in index.blade.php to "📅 Calendario".
+- [x] 4. Include FullCalendar CDN/CSS/JS per-view.
+- [x] 5. Test calendar rendering and color coding (via php artisan serve).
 
 

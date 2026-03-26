@@ -71,4 +71,24 @@ return view('rooms.index', compact('rooms','allRes','myRes','todayRes', 'from', 
     {
         return $this->commonApprove($id, RoomReservation::class, 'confirmada', 'Reserva confirmada.');
     }
+
+    public function calendar()
+    {
+        $reservations = RoomReservation::with('user')
+            ->whereIn('status', ['pendiente', 'confirmada'])
+            ->get()
+            ->map(function ($res) {
+                $end = \Carbon\Carbon::parse($res->date);
+                return [
+                    'title' => $res->room . ' - ' . $res->user->name . ' (' . $res->hour . ' ' . $res->duration . 'h)',
+                    'start' => $res->date,
+                    'end' => $end->copy()->addDay(),
+                    'status' => $res->status,
+                    'url' => route('rooms.index')
+                ];
+            });
+
+        $events = $reservations->toArray();
+        return view('rooms.calendar', compact('events'));
+    }
 }

@@ -44,6 +44,7 @@
     <p class="section-subtitle">Reserva un vehículo para desplazamientos corporativos</p>
   </div>
   <div class="page-header-actions">
+    <a href="{{ route('cars.calendar') }}" class="btn btn-ghost">📅 Calendario</a>
     <a href="{{ route('cars.create') }}" class="btn btn-primary"><span>+</span> Reservar vehículo</a>
   </div>
 </div>

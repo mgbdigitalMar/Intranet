@@ -44,6 +44,7 @@
     <p class="section-subtitle">Gestiona la disponibilidad de las salas de reuniones</p>
   </div>
   <div class="page-header-actions">
+    <a href="{{ route('rooms.calendar') }}" class="btn btn-ghost">📅 Calendario</a>
     <a href="{{ route('rooms.create') }}" class="btn btn-primary"><span>+</span> Reservar sala</a>
   </div>
 </div>

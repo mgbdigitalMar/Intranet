@@ -69,4 +69,24 @@ return view('cars.index', compact('cars','allRes','myRes','today', 'from', 'to')
     {
         return $this->commonApprove($id, CarReservation::class, 'confirmada', 'Reserva de vehículo confirmada.');
     }
+
+    public function calendar()
+    {
+        $reservations = CarReservation::with('user')
+            ->whereIn('status', ['pendiente', 'confirmada'])
+            ->get()
+            ->map(function ($res) {
+                $end = \Carbon\Carbon::parse($res->date);
+                return [
+                    'title' => $res->car . ' - ' . $res->user->name . ' (' . $res->hour . ')',
+                    'start' => $res->date,
+                    'end' => $end->copy()->addDay(),
+                    'status' => $res->status,
+                    'url' => route('cars.index')
+                ];
+            });
+
+        $events = $reservations->toArray();
+        return view('cars.calendar', compact('events'));
+    }
 }
