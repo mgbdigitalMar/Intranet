@@ -3,7 +3,6 @@ providers = ["php", "nodejs"]
 
 [build.php]
 version = "8.2"
-extensions = ["pgsql", "pdo_pgsql"]
 
 [build.nodejs]
 version = "20"
